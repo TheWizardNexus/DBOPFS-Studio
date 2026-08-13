@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="DBOPFS Studio is a polished Chromium workspace for exploring, editing, previewing, printing, and managing DBOPFS application data stored in OPFS.">
+    <meta name="theme-color" content="#050b16">
+    <link rel="icon" href="data:,">
+    <link rel="canonical" href="https://thewizardnexus.github.io/DBOPFS-Studio/">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://thewizardnexus.github.io/DBOPFS-Studio/">
+    <meta property="og:title" content="DBOPFS Studio — Your browser data, made legible">
+    <meta property="og:description" content="A DBOPFS-powered workspace for Chrome, Edge, Brave, Vivaldi, Opera, and compatible Chromium browsers.">
+    <meta name="twitter:card" content="summary">
+    <title>DBOPFS Studio — Your browser data, made legible</title>
+    <link rel="stylesheet" href="assets/site.css">
+    <script type="module" src="assets/site.js"></script>
+</head>
+<body data-page="home">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="brand" href="index.html" aria-label="DBOPFS Studio home">
+                <span class="brand-mark" aria-hidden="true"></span>
+                <span class="brand-copy"><strong>DBOPFS Studio</strong><small>The Wizard Nexus</small></span>
+            </a>
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation"><span class="nav-toggle__icon" aria-hidden="true"></span><span>Menu</span></button>
+            <nav class="site-nav" id="site-navigation" aria-label="Primary navigation">
+                <a href="index.html" data-nav="home">Overview</a>
+                <a href="install.html" data-nav="install">Install</a>
+                <a href="architecture.html" data-nav="architecture">Architecture</a>
+                <a href="privacy.html" data-nav="privacy">Privacy</a>
+                <a href="https://github.com/TheWizardNexus/DBOPFS-Studio">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <section class="hero">
+            <div class="wrap hero-grid">
+                <div>
+                    <p class="eyebrow">DBOPFS-powered storage workspace</p>
+                    <h1>Your browser data, made legible.</h1>
+                    <p class="hero-lede">Explore an origin's DBOPFS applications, tables, and records in a focused workspace built for real inspection, editing, previewing, export, and print workflows.</p>
+                    <div class="hero-actions">
+                        <a class="button" href="install.html">Install from source</a>
+                        <a class="button secondary" href="architecture.html">See how it works</a>
+                        <a class="button ghost" href="https://github.com/TheWizardNexus/DBOPFS-Studio">View repository</a>
+                    </div>
+                    <div class="compatibility" aria-label="Target browser support">
+                        <strong>Chromium MV3</strong>
+                        <span>Chrome</span><span>Edge</span><span>Brave</span><span>Vivaldi</span><span>Opera</span>
+                    </div>
+                </div>
+
+                <div class="studio-window" aria-label="Illustration of the DBOPFS Studio workspace">
+                    <div class="window-bar">
+                        <span class="window-dot"></span><span class="window-dot"></span><span class="window-dot"></span>
+                        <span class="window-title">DBOPFS Studio · app.example</span>
+                    </div>
+                    <div class="studio-grid">
+                        <aside class="studio-sidebar">
+                            <span class="ui-label">Origin storage</span>
+                            <div class="tree">
+                                <span>▾ apps</span>
+                                <span class="indent">▾ field-notes</span>
+                                <span class="deeper active">◇ records</span>
+                                <span class="deeper">◇ attachments</span>
+                                <span class="indent">▸ photo-catalog</span>
+                            </div>
+                        </aside>
+                        <div class="studio-main">
+                            <div class="studio-toolbar">
+                                <span class="crumbs">apps / field-notes / records</span>
+                                <span class="live-chip">connected</span>
+                            </div>
+                            <div class="metric-row">
+                                <div class="metric"><small>Tables</small><strong>06</strong></div>
+                                <div class="metric"><small>Records</small><strong>248</strong></div>
+                                <div class="metric"><small>Storage</small><strong>18 MB</strong></div>
+                            </div>
+                            <div class="editor">
+                                <div class="editor-tabs">observation-0248.json</div>
+                                <pre class="editor-code"><span class="code-key">{</span>
+  <span class="code-key">"title"</span>: <span class="code-value">"Summer survey"</span>,
+  <span class="code-key">"status"</span>: <span class="code-value">"reviewed"</span>,
+  <span class="code-key">"coordinates"</span>: <span class="code-key">{</span>
+    <span class="code-key">"latitude"</span>: <span class="code-number">41.8781</span>,
+    <span class="code-key">"longitude"</span>: <span class="code-number">-87.6298</span>
+  <span class="code-key">}</span>,
+  <span class="code-key">"attachments"</span>: <span class="code-number">3</span>
+<span class="code-key">}</span></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section soft">
+            <div class="wrap">
+                <div class="section-heading">
+                    <p class="eyebrow">Database semantics first</p>
+                    <h2>Not just another file tree.</h2>
+                    <p>DBOPFS Studio uses the DBOPFS module as its primary data layer. Application scopes, tables, records, formats, and guarded data operations stay visible throughout the current 0.1 interface.</p>
+                </div>
+                <div class="feature-grid">
+                    <article class="card">
+                        <span class="card-number">01 / UNDERSTAND</span>
+                        <h3>See storage as data.</h3>
+                        <p>Move from origin to DBOPFS application, table, and record without reverse-engineering directory conventions on every visit.</p>
+                    </article>
+                    <article class="card">
+                        <span class="card-number">02 / EDIT</span>
+                        <h3>Work where you inspect.</h3>
+                        <p>Open text-based records and files, make focused inline changes, validate structured content, and save through the connected origin.</p>
+                    </article>
+                    <article class="card">
+                        <span class="card-number">03 / CONTROL</span>
+                        <h3>Know before you change.</h3>
+                        <p>Review origin connection, browser-reported storage use, quota, persistence state, and guarded destructive actions from one dashboard.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="wrap">
+                <div class="section-heading">
+                    <p class="eyebrow">A practical workspace</p>
+                    <h2>From inspection to action.</h2>
+                    <p>Use one coherent surface for current DBOPFS workflows without turning the extension into a server, cloud account, or opaque copy of your database.</p>
+                </div>
+                <div class="card-grid two">
+                    <article class="card">
+                        <h3>Dashboard and DBOPFS explorer</h3>
+                        <p>Connect the active or inspected origin, review storage health, browse DBOPFS applications, tables, and records, filter names, and inspect record metadata.</p>
+                    </article>
+                    <article class="card">
+                        <h3>Editing and record operations</h3>
+                        <p>Create tables and records, import files into a table, export an application, edit and save supported text-based records, and delete records with exact-name confirmation.</p>
+                    </article>
+                    <article class="card">
+                        <h3>Native media and PDF handling</h3>
+                        <p>Preview images, audio, and video. Print text, JSON, Markdown, and images through Studio; PDFs open in Chromium's own viewer for viewing and printing. Audio and video have no printable Studio rendering.</p>
+                    </article>
+                    <article class="card">
+                        <h3>Local by design</h3>
+                        <p>Inspected content stays in the browser unless you intentionally export, download, copy, or print it. No DBOPFS Studio account or analytics service is required.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section soft">
+            <div class="wrap split">
+                <div>
+                    <p class="eyebrow">The browser is the boundary</p>
+                    <h2>One connected origin at a time.</h2>
+                    <p class="page-lede">OPFS is isolated by protocol, hostname, and port. DBOPFS Studio works through a live active or inspected page that you connect; it cannot expose every closed site's private filesystem as one global drive.</p>
+                    <div class="hero-actions">
+                        <a class="button secondary" href="architecture.html#origin-boundary">Understand origin access</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <span class="card-number">TRUST / EXPLICIT</span>
+                    <h3>You choose the workspace target.</h3>
+                    <p>The manifest allows an isolated bridge on HTTP(S) pages. DBOPFS operations begin when the Studio sends a request to the selected tab. Connection state is visible, and switching origins does not merge their data.</p>
+                    <p><a href="privacy.html">Read the privacy policy</a></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="wrap split">
+                <div>
+                    <p class="eyebrow">Roadmap · beyond 0.1</p>
+                    <h2>A broader OPFS toolbox comes next.</h2>
+                    <p class="page-lede">The current UI focuses on DBOPFS application data. Raw OPFS browsing outside DBOPFS namespaces, plus rename, move, and copy commands, are planned capabilities—not features of the shipped 0.1 interface.</p>
+                </div>
+                <div class="card">
+                    <span class="card-number">PLANNED / CLEARLY SEPARATE</span>
+                    <h3>Raw files without losing DBOPFS context.</h3>
+                    <p>The planned raw view will complement the database-aware explorer. Until it ships, use the Studio for the DBOPFS applications, tables, and records displayed by the current interface.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section soft">
+            <div class="wrap">
+                <div class="section-heading">
+                    <p class="eyebrow">Chromium family</p>
+                    <h2>One extension, several browsers.</h2>
+                    <p>Chrome and Microsoft Edge are first-class targets. Other current Chromium builds can use the same unpacked Manifest V3 extension when they provide the required APIs; privacy modes, enterprise policies, and native PDF controls may differ.</p>
+                </div>
+                <div class="browser-grid" aria-label="Target browsers">
+                    <div class="browser-card"><span class="browser-letter">C</span><strong>Chrome</strong><small>First-class target</small></div>
+                    <div class="browser-card"><span class="browser-letter">E</span><strong>Microsoft Edge</strong><small>First-class target</small></div>
+                    <div class="browser-card"><span class="browser-letter">B</span><strong>Brave</strong><small>Compatible target</small></div>
+                    <div class="browser-card"><span class="browser-letter">V</span><strong>Vivaldi</strong><small>Compatible target</small></div>
+                    <div class="browser-card"><span class="browser-letter">O</span><strong>Opera</strong><small>Compatible target</small></div>
+                </div>
+                <div class="callout warning">
+                    <p><strong>Capability detection matters.</strong> A Chromium foundation does not make every browser build identical. DBOPFS Studio checks the storage surface it needs and reports unavailable capabilities instead of assuming them.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section compact soft">
+            <div class="wrap split">
+                <div>
+                    <p class="eyebrow">Ready to inspect differently?</p>
+                    <h2>Load DBOPFS Studio from source.</h2>
+                    <p class="page-lede">The first build is installed as an unpacked extension from this repository. Store publication will be documented when it is actually available.</p>
+                </div>
+                <div class="hero-actions">
+                    <a class="button" href="install.html">Open installation guide</a>
+                    <a class="button ghost" href="https://github.com/TheWizardNexus/DBOPFS-Studio">Get the source</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap">
+            <div class="footer-grid">
+                <div><h2>DBOPFS Studio</h2><p>A browser-native data workspace by The Wizard Nexus. Where WiZdom Meets Innovation.</p></div>
+                <div><h2>Use</h2><ul><li><a href="install.html">Install unpacked</a></li><li><a href="architecture.html">Architecture</a></li><li><a href="https://github.com/TheWizardNexus/DBOPFS-Studio">Source code</a></li></ul></div>
+                <div><h2>Trust</h2><ul><li><a href="privacy.html">Privacy policy</a></li><li><a href="https://github.com/TheWizardNexus/DBOPFS-Studio/blob/main/SECURITY.md">Security policy</a></li><li><a href="license.html">License &amp; notices</a></li></ul></div>
+                <div><h2>Ecosystem</h2><ul><li><a href="https://thewizardnexus.github.io/DBOPFS/">DBOPFS</a></li><li><a href="https://www.thewizardnexus.com/">The Wizard Nexus</a></li><li><a href="https://github.com/TheWizardNexus">GitHub organization</a></li></ul></div>
+            </div>
+            <div class="footer-meta"><span>© <span data-current-year></span> The Wizard Nexus</span><span>Source-available · PolyForm Noncommercial 1.0.0</span></div>
+        </div>
+    </footer>
+</body>
+</html>

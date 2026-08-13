@@ -1,0 +1,61 @@
+{
+  "manifest_version": 3,
+  "name": "DBOPFS Studio",
+  "version": "0.1.0",
+  "description": "A DBOPFS-powered OPFS workspace for Chrome, Edge, Brave, Vivaldi, Opera, and other Chromium browsers.",
+  "minimum_chrome_version": "109",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "background": {
+    "service_worker": "background/service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Open DBOPFS Studio",
+    "default_popup": "popup/index.html",
+    "default_icon": {
+      "16": "assets/icons/icon-16.png",
+      "32": "assets/icons/icon-32.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "agent/bootstrap.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "devtools_page": "devtools/devtools.html",
+  "icons": {
+    "16": "assets/icons/icon-16.png",
+    "32": "assets/icons/icon-32.png",
+    "48": "assets/icons/icon-48.png",
+    "128": "assets/icons/icon-128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "agent/dbopfs-page-agent.js",
+        "shared/dbopfs-protocol.js",
+        "vendor/dbopfs/arcane/modules/AppDataScope.js",
+        "vendor/dbopfs/arcane/modules/DBOPFSStudio.js",
+        "vendor/dbopfs/arcane/modules/DBOPFSWorker.js",
+        "vendor/dbopfs/node_modules/strong-type/index.js"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ]
+    }
+  ]
+}

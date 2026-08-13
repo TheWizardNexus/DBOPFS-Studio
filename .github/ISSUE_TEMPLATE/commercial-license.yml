@@ -1,0 +1,50 @@
+name: Commercial license request
+description: Request a private conversation about commercial use of DBOPFS Studio.
+title: "Commercial license request: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form only to request a commercial-license conversation. Do not post confidential information, credentials, payment details, customer data, or proprietary materials. The Wizard Nexus will provide a private contact path.
+
+  - type: input
+    id: organization
+    attributes:
+      label: Organization
+      description: The person or organization seeking a license.
+      placeholder: Organization or individual name
+    validations:
+      required: true
+
+  - type: dropdown
+    id: use
+    attributes:
+      label: Intended use
+      options:
+        - Internal business use
+        - Customer-facing product or service
+        - Redistribution
+        - Consulting or managed service
+        - Evaluation before commercial adoption
+        - Other commercial use
+    validations:
+      required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Public, non-confidential summary
+      description: Briefly describe the intended use without sensitive details.
+      placeholder: We would like to use DBOPFS Studio to…
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: acknowledgement
+    attributes:
+      label: Acknowledgements
+      options:
+        - label: I understand this public issue does not grant commercial rights.
+          required: true
+        - label: I have not included confidential information, credentials, payment details, or personal data.
+          required: true

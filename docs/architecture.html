@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Understand DBOPFS Studio's DBOPFS-first architecture, Chromium permissions, origin boundaries, and native PDF handling.">
+    <meta name="theme-color" content="#050b16">
+    <link rel="icon" href="data:,">
+    <link rel="canonical" href="https://thewizardnexus.github.io/DBOPFS-Studio/architecture.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="DBOPFS Studio architecture">
+    <meta property="og:description" content="A DBOPFS-first extension architecture that connects explicitly to one Chromium origin at a time.">
+    <title>Architecture — DBOPFS Studio</title>
+    <link rel="stylesheet" href="assets/site.css">
+    <script type="module" src="assets/site.js"></script>
+</head>
+<body data-page="architecture">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="brand" href="index.html" aria-label="DBOPFS Studio home"><span class="brand-mark" aria-hidden="true"></span><span class="brand-copy"><strong>DBOPFS Studio</strong><small>The Wizard Nexus</small></span></a>
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation"><span class="nav-toggle__icon" aria-hidden="true"></span><span>Menu</span></button>
+            <nav class="site-nav" id="site-navigation" aria-label="Primary navigation"><a href="index.html" data-nav="home">Overview</a><a href="install.html" data-nav="install">Install</a><a href="architecture.html" data-nav="architecture">Architecture</a><a href="privacy.html" data-nav="privacy">Privacy</a><a href="https://github.com/TheWizardNexus/DBOPFS-Studio">GitHub</a></nav>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <section class="page-hero">
+            <div class="wrap">
+                <p class="eyebrow">Architecture and trust model</p>
+                <h1>DBOPFS at the center.</h1>
+                <p class="page-lede">The Studio is a Chromium workspace around the DBOPFS module—not a generic file explorer wearing DBOPFS branding. The current 0.1 interface uses DBOPFS semantics for its application, table, and record workflows.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="wrap page-layout">
+                <article class="prose">
+                    <h2 id="layers">Four cooperative layers</h2>
+                    <p>The interface lives in an extension-owned workspace, but the storage authority belongs to the connected website. A dormant isolated content script receives a Studio request, lazily imports the packaged DBOPFS agent in its isolated world, performs the operation against the inspected origin's storage, and returns a serializable result through extension messaging.</p>
+
+                    <div class="diagram" aria-label="DBOPFS Studio data flow">
+                        <div class="diagram-box"><strong>Studio workspace</strong><small>Dashboard, tree, editor, preview, confirmation</small></div>
+                        <div class="diagram-box"><strong>Isolated bridge</strong><small>Dormant until a selected-tab request arrives</small></div>
+                        <div class="diagram-box"><strong>Isolated agent</strong><small>Lazily imported and called directly by the bridge</small></div>
+                        <div class="diagram-box"><strong>DBOPFS + OPFS</strong><small>DBOPFS API operating on origin-private storage</small></div>
+                    </div>
+
+                    <h3>1. Studio workspace</h3>
+                    <p>The user-facing dashboard and editor run under the extension's own origin. They do not directly call <code>navigator.storage.getDirectory()</code>, because that would open the extension's private OPFS—not the website's.</p>
+
+                    <h3>2. Isolated extension bridge</h3>
+                    <p>A Manifest V3 content script provides a dormant isolated bridge on permitted HTTP(S) pages. The workspace associates each operation with its selected tab, and requests and results travel through extension messaging rather than shared filesystem handles or DOM events.</p>
+
+                    <h3>3. Isolated-world agent</h3>
+                    <p>On first request, the bridge dynamically imports the declared agent module with an extension URL and calls its exported request handler directly in the isolated content-script world. Content-script web storage is still scoped to the host page's origin, so OPFS resolves against the inspected website. No DOM script element, page-main-world execution, or DOM request/response channel is involved. This design also works when the site enforces a strict Content Security Policy such as <code>script-src 'none'</code>.</p>
+
+                    <h3>4. Bundled DBOPFS runtime</h3>
+                    <p>The extension carries verified DBOPFS 1.0.0 runtime files and the runtime's bundled <code>strong-type@1.1.0</code> dependency. It does not load application logic from a CDN. Provenance and upstream hashes are recorded in the repository's <a href="https://github.com/TheWizardNexus/DBOPFS-Studio/blob/main/SOURCE_PROVENANCE.md">source provenance</a>.</p>
+
+                    <h2 id="dbopfs-first">DBOPFS-first operations</h2>
+                    <p>In database mode, the navigation model follows DBOPFS:</p>
+                    <pre><code>OPFS root/
+└── apps/
+    └── &lt;application-id&gt;/
+        ├── &lt;table&gt;/
+        │   └── &lt;record-key&gt;
+        └── &lt;another-table&gt;/</code></pre>
+                    <p>Application, table, and record actions use the bundled DBOPFS module so the Studio honors its naming, serialization, application scoping, and error behavior. In 0.1, the visible explorer is limited to discovered DBOPFS application namespaces. A raw OPFS explorer for data outside that model is on the roadmap and is not exposed by the current UI.</p>
+                    <div class="callout warning">
+                        <p><strong>An application ID is organization, not security isolation.</strong> Code with authority on the same origin can bypass DBOPFS and call the raw OPFS APIs. Use separate origins or browser profiles for mutually untrusted applications.</p>
+                    </div>
+
+                    <h2 id="origin-boundary">The origin boundary</h2>
+                    <p>OPFS is browser-private storage attached to an origin. At minimum, protocol, hostname, and port must match. Browsers may add storage partitioning based on top-level site, profile, private-browsing mode, or policy.</p>
+                    <table>
+                        <thead><tr><th>Context</th><th>Relationship</th><th>Expected OPFS</th></tr></thead>
+                        <tbody>
+                            <tr><td><code>https://app.example/a</code> and <code>/b</code></td><td>Same origin</td><td>Same origin root</td></tr>
+                            <tr><td><code>https://app.example</code> and <code>http://app.example</code></td><td>Different protocol</td><td>Separate</td></tr>
+                            <tr><td><code>https://app.example</code> and <code>https://admin.example</code></td><td>Different hostname</td><td>Separate</td></tr>
+                            <tr><td><code>https://app.example:443</code> and <code>:8443</code></td><td>Different port</td><td>Separate</td></tr>
+                        </tbody>
+                    </table>
+                    <p>DBOPFS Studio therefore operates on one selected live active or inspected page at a time. The permitted HTTP(S) content-script bridge is not a mounted global filesystem, and it does not make closed sites available. Protected browser pages and origins without a connectable tab cannot be inspected.</p>
+
+                    <h2 id="permissions">Permissions, explained</h2>
+                    <p>The unpacked build uses only <code>storage</code> as an explicit API permission, plus HTTP(S) host access for the static dormant bridge. Application exports use a browser download initiated by the page rather than a dedicated extension-download permission. Check the current <code>extension/manifest.json</code> before release, because it is the authoritative list.</p>
+                    <div class="permission-list">
+                        <div class="permission-row"><code>http://*/* + https://*/*</code><span>Allows the isolated bridge on ordinary web pages. The bridge carries Studio requests to the selected page; it does not turn unrelated origins into one filesystem.</span></div>
+                        <div class="permission-row"><code>storage</code><span>Temporarily hands a selected record to Studio's extension-owned print page. The print page removes the session entry immediately after reading it.</span></div>
+                        <div class="permission-row"><code>web_accessible_resources</code><span>Exposes only the individually declared integration modules required by the isolated agent: the agent and protocol, DBOPFS adapter and application scope, guarded worker, and strong-type module. No wildcard resource path is used. This declaration is not a separate browser permission prompt.</span></div>
+                    </div>
+                    <p>Some URLs remain off-limits regardless of how Studio is opened, including browser-internal pages, browser extension stores, and other protected surfaces. Enterprise policy can further restrict installation or scripting.</p>
+
+                    <h2 id="workers">Why the worker fallback is guarded</h2>
+                    <p>OPFS synchronous access handles are worker-only. A worker launched from an extension URL can resolve storage under the extension origin rather than the inspected website, which would make a successful-looking operation target the wrong filesystem. DBOPFS Studio refuses that unsafe fallback instead of silently crossing origin semantics. Capabilities that cannot be performed correctly in the page's origin are reported as unavailable.</p>
+
+                    <h2 id="editing">Editing and destructive actions</h2>
+                    <p>Supported text-based records can be decoded and edited in the Studio, then written through the connected isolated agent. JSON is validated before save. Browser-supported images, audio, and video receive previews; PDFs and other binary records can open through the browser rather than being coerced into text.</p>
+                    <p>The 0.1 UI can create tables and records, import files into a selected table, export an application, save record changes, and delete a record after exact-name confirmation. A backup remains the only reliable undo after data is removed.</p>
+                    <div class="callout"><p><strong>Roadmap boundary.</strong> Rename, move, copy, raw OPFS browsing, table deletion, restore, and origin-wide clear are not exposed by the current Studio interface.</p></div>
+
+                    <h2 id="pdf">Native PDF and print path</h2>
+                    <p>DBOPFS Studio does not bundle PDF.js or another PDF renderer. It reads the selected PDF from the connected origin, gives the document to a browser-owned PDF surface, and relies on that browser for rendering and print UI. The exact annotation, form, save, and editing controls vary among Chrome, Edge, Brave, Vivaldi, Opera, and their versions.</p>
+                    <p>The Studio print surface renders text, JSON, Markdown, and image records before entering the browser and operating-system print path. Audio and video can be previewed, but intentionally have no printable Studio rendering. Once a user exports, downloads, or prints content, that copy is outside OPFS and outside the Studio's retention controls.</p>
+
+                    <h2 id="browser-support">Browser support strategy</h2>
+                    <p>Chrome and Microsoft Edge are first-class test targets. Brave, Vivaldi, Opera, and other Chromium browsers are compatibility targets when they provide the required Manifest V3 scripting and OPFS APIs. Capability detection is preferred over user-agent assumptions.</p>
+                    <p>A shared Chromium engine does not guarantee identical extension policy, storage quota, persistence, partitioning, protected pages, DevTools behavior, or PDF tools. Compatibility reports should include the browser and version, operating system, page origin shape, and the unavailable capability—without including private OPFS content.</p>
+
+                    <h2 id="non-goals">Deliberate non-goals</h2>
+                    <ul>
+                        <li>No remote database, account system, telemetry pipeline, or automatic cloud synchronization.</li>
+                        <li>No claim to bypass browser origin isolation, protected pages, enterprise policy, or user permission.</li>
+                        <li>No bundled PDF renderer or promise of identical PDF editing controls across Chromium builds.</li>
+                        <li>No claim that DBOPFS application folders isolate hostile same-origin code.</li>
+                        <li>No server-side or Node.js execution of the browser-only DBOPFS runtime.</li>
+                    </ul>
+                </article>
+
+                <aside class="page-toc" aria-label="On this page">
+                    <strong>On this page</strong>
+                    <a href="#layers">System layers</a><a href="#dbopfs-first">DBOPFS first</a><a href="#origin-boundary">Origin boundary</a><a href="#permissions">Permissions</a><a href="#workers">Worker guard</a><a href="#editing">Editing</a><a href="#pdf">PDF and print</a><a href="#browser-support">Browser support</a><a href="#non-goals">Non-goals</a>
+                </aside>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap">
+            <div class="footer-grid">
+                <div><h2>DBOPFS Studio</h2><p>A browser-native data workspace by The Wizard Nexus. Where WiZdom Meets Innovation.</p></div>
+                <div><h2>Use</h2><ul><li><a href="install.html">Install unpacked</a></li><li><a href="architecture.html">Architecture</a></li><li><a href="https://github.com/TheWizardNexus/DBOPFS-Studio">Source code</a></li></ul></div>
+                <div><h2>Trust</h2><ul><li><a href="privacy.html">Privacy policy</a></li><li><a href="https://github.com/TheWizardNexus/DBOPFS-Studio/blob/main/SECURITY.md">Security policy</a></li><li><a href="license.html">License &amp; notices</a></li></ul></div>
+                <div><h2>Ecosystem</h2><ul><li><a href="https://thewizardnexus.github.io/DBOPFS/">DBOPFS</a></li><li><a href="https://www.thewizardnexus.com/">The Wizard Nexus</a></li><li><a href="https://github.com/TheWizardNexus">GitHub organization</a></li></ul></div>
+            </div>
+            <div class="footer-meta"><span>© <span data-current-year></span> The Wizard Nexus</span><span>Source-available · PolyForm Noncommercial 1.0.0</span></div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,2 @@
+# Vendored sources retain their upstream byte identity, including whitespace.
+extension/vendor/** -whitespace

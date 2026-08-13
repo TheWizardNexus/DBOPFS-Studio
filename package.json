@@ -1,0 +1,26 @@
+{
+  "name": "dbopfs-studio",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A DBOPFS-powered Chromium workspace for exploring and managing origin-private file systems.",
+  "type": "module",
+  "scripts": {
+    "icons": "node scripts/render-icons.mjs",
+    "start": "node scripts/serve.mjs",
+    "test": "node scripts/test-all.mjs",
+    "test:browser": "node scripts/test-browser.mjs",
+    "test:extension": "node scripts/test-extension.mjs",
+    "coverage": "node scripts/test-browser.mjs --coverage --threshold 60",
+    "validate": "node scripts/validate-release.mjs",
+    "package": "node scripts/package-extension.mjs",
+    "release:test": "node scripts/release-test.mjs"
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
+  "devDependencies": {
+    "fflate": "0.8.2",
+    "puppeteer-core": "25.7.0",
+    "vanilla-test": "1.4.9"
+  }
+}

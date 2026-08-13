@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:,">
+    <title>DBOPFS Studio browser tests</title>
+    <style>
+      :root { color-scheme: dark; font: 16px/1.5 system-ui, sans-serif; }
+      body { background: #101018; color: #f4efe2; margin: 0 auto; max-width: 64rem; padding: 2rem; }
+      h1 { color: #e9bd61; }
+      #summary { border: 1px solid #3a3850; border-radius: .75rem; padding: 1rem; }
+      .pass { color: #67d9c1; }
+      .fail { color: #ff8d9a; }
+      code { color: #b9a7ff; }
+    </style>
+  </head>
+  <body>
+    <h1>DBOPFS Studio browser tests</h1>
+    <p>These tests use <code>vanilla-test</code> inside Chromium.</p>
+    <div id="summary" aria-live="polite">Running…</div>
+    <ol id="results"></ol>
+    <script type="module" src="./suite.js"></script>
+  </body>
+</html>

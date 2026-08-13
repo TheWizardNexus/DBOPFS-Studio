@@ -1,0 +1,10 @@
+node_modules/
+!extension/vendor/dbopfs/node_modules/
+!extension/vendor/dbopfs/node_modules/strong-type/
+!extension/vendor/dbopfs/node_modules/strong-type/**
+artifacts/
+coverage/
+*.crx
+*.pem
+.DS_Store
+Thumbs.db

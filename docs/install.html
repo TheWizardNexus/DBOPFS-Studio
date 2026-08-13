@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Install DBOPFS Studio as an unpacked extension in Chrome, Microsoft Edge, Brave, Vivaldi, Opera, and compatible Chromium browsers.">
+    <meta name="theme-color" content="#050b16">
+    <link rel="icon" href="data:,">
+    <link rel="canonical" href="https://thewizardnexus.github.io/DBOPFS-Studio/install.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Install DBOPFS Studio">
+    <meta property="og:description" content="Load the DBOPFS-powered OPFS workspace from source in a compatible Chromium browser.">
+    <title>Install — DBOPFS Studio</title>
+    <link rel="stylesheet" href="assets/site.css">
+    <script type="module" src="assets/site.js"></script>
+</head>
+<body data-page="install">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="brand" href="index.html" aria-label="DBOPFS Studio home"><span class="brand-mark" aria-hidden="true"></span><span class="brand-copy"><strong>DBOPFS Studio</strong><small>The Wizard Nexus</small></span></a>
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation"><span class="nav-toggle__icon" aria-hidden="true"></span><span>Menu</span></button>
+            <nav class="site-nav" id="site-navigation" aria-label="Primary navigation"><a href="index.html" data-nav="home">Overview</a><a href="install.html" data-nav="install">Install</a><a href="architecture.html" data-nav="architecture">Architecture</a><a href="privacy.html" data-nav="privacy">Privacy</a><a href="https://github.com/TheWizardNexus/DBOPFS-Studio">GitHub</a></nav>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <section class="page-hero">
+            <div class="wrap">
+                <p class="eyebrow">Install from source</p>
+                <h1>Open the Studio in Chromium.</h1>
+                <p class="page-lede">DBOPFS Studio is installed from the repository's self-contained <code>extension/</code> folder. No build, CDN, PDF library, or TypeScript toolchain is required to load the extension.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="wrap page-layout">
+                <article class="prose">
+                    <h2 id="download">1. Get the source</h2>
+                    <p>Clone the repository with Git, or download and extract the ZIP from GitHub. Keep the directory intact: the manifest, workspace, shared modules, and bundled DBOPFS runtime use relative paths inside <code>extension/</code>.</p>
+
+                    <div class="code-card">
+                        <div class="code-card__header"><span>Terminal</span><button class="copy-button" type="button" data-copy-target="clone-command">Copy</button></div>
+                        <pre><code id="clone-command">git clone https://github.com/TheWizardNexus/DBOPFS-Studio.git</code></pre>
+                    </div>
+
+                    <p><a class="button secondary" href="https://github.com/TheWizardNexus/DBOPFS-Studio/archive/refs/heads/main.zip">Download main as ZIP</a></p>
+
+                    <h2 id="load">2. Load the extension</h2>
+                    <ol class="steps">
+                        <li><strong>Open extension management.</strong>Use your browser's internal extensions page from the table below.</li>
+                        <li><strong>Enable Developer mode.</strong>The switch is usually at the top-right or in the extensions-page navigation.</li>
+                        <li><strong>Choose Load unpacked.</strong>Select <code>DBOPFS-Studio/extension/</code>—the folder containing <code>manifest.json</code>, not the repository root.</li>
+                        <li><strong>Pin DBOPFS Studio.</strong>Keeping the toolbar action visible makes the connected origin clear and easy to reopen.</li>
+                    </ol>
+
+                    <table aria-label="Browser extension management addresses">
+                        <thead><tr><th>Browser</th><th>Open this address</th><th>Support target</th></tr></thead>
+                        <tbody>
+                            <tr><td>Google Chrome</td><td><code>chrome://extensions</code></td><td>First-class</td></tr>
+                            <tr><td>Microsoft Edge</td><td><code>edge://extensions</code></td><td>First-class</td></tr>
+                            <tr><td>Brave</td><td><code>brave://extensions</code></td><td>Compatible Chromium</td></tr>
+                            <tr><td>Vivaldi</td><td><code>vivaldi://extensions</code></td><td>Compatible Chromium</td></tr>
+                            <tr><td>Opera</td><td><code>opera://extensions</code></td><td>Compatible Chromium</td></tr>
+                        </tbody>
+                    </table>
+
+                    <div class="callout warning">
+                        <p><strong>Internal browser addresses are not web links.</strong> Copy or type the appropriate address into the browser's address bar.</p>
+                    </div>
+
+                    <h2 id="connect">3. Connect an origin</h2>
+                    <p>Open the website whose storage you intend to inspect. The website must itself have access to OPFS—normally that means HTTPS or localhost. Activate DBOPFS Studio for the current tab, then open its full workspace.</p>
+                    <p>The browser grants the extension access to HTTP(S) pages when you install or approve it. A dormant isolated content-script bridge is available on those pages; the Studio sends DBOPFS requests only to the tab you select. On first request, that bridge imports the packaged agent in the same isolated world. Browser storage accessed from a content script remains scoped to the host page's origin, so OPFS resolves to the inspected website rather than the extension.</p>
+                    <div class="callout">
+                        <p><strong>Check the origin before editing.</strong> Protocol, hostname, and port identify the OPFS boundary. <code>https://app.example</code> and <code>https://admin.example</code> do not share one OPFS root.</p>
+                    </div>
+
+                    <h2 id="pdf">PDFs and printing</h2>
+                    <p>When you open a PDF record from a displayed DBOPFS table, DBOPFS Studio hands it to the Chromium browser's native PDF surface. Viewing and printing do not require a bundled PDF library. Annotation, form, save, and editing controls vary by browser and version, so the Studio reports the document to the browser instead of promising identical PDF tools everywhere.</p>
+                    <p>The Studio print surface supports text, JSON, Markdown, and image records. Audio and video records can be previewed and opened in the browser, but the Studio intentionally reports that they do not have a printable preview.</p>
+
+                    <h2 id="update">Update an unpacked install</h2>
+                    <p>Pull or download the latest source, then return to the extensions page and choose the reload action on the DBOPFS Studio card. Reload any already-open Studio or inspected-site tabs so every context uses the same version.</p>
+                    <div class="code-card">
+                        <div class="code-card__header"><span>From a Git checkout</span><button class="copy-button" type="button" data-copy-target="update-command">Copy</button></div>
+                        <pre><code id="update-command">git -C DBOPFS-Studio pull --ff-only origin main</code></pre>
+                    </div>
+
+                    <h2 id="troubleshoot">Troubleshooting</h2>
+                    <h3>The site cannot connect</h3>
+                    <p>Confirm that the active page is a normal HTTPS or localhost page, that Studio targets that exact tab, and that browser policy permits extensions and content scripts. Built-in browser pages, extension pages, the browser store, and other protected URLs do not allow the isolated bridge.</p>
+
+                    <h3>No files appear</h3>
+                    <p>The current origin may not have created OPFS data, may be in a different browser profile, or may be separated by storage partitioning or private-browsing rules. Verify the full origin shown by the Studio.</p>
+
+                    <h3>Load unpacked reports an error</h3>
+                    <p>Make sure you selected the repository's <code>extension/</code> folder and did not move individual files out of it. Reload after replacing source files. The browser's extension card shows the specific manifest or module error when loading fails.</p>
+
+                    <h3>A feature differs in Brave, Vivaldi, or Opera</h3>
+                    <p>Those browsers share Chromium foundations but can change privacy behavior, internal pages, enterprise controls, PDF surfaces, and release timing. Try a current stable version and compare in Chrome or Edge before filing a compatibility report.</p>
+                </article>
+
+                <aside class="page-toc" aria-label="On this page">
+                    <strong>On this page</strong>
+                    <a href="#download">Get the source</a><a href="#load">Load the extension</a><a href="#connect">Connect an origin</a><a href="#pdf">PDFs and printing</a><a href="#update">Update</a><a href="#troubleshoot">Troubleshooting</a>
+                </aside>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap">
+            <div class="footer-grid">
+                <div><h2>DBOPFS Studio</h2><p>A browser-native data workspace by The Wizard Nexus. Where WiZdom Meets Innovation.</p></div>
+                <div><h2>Use</h2><ul><li><a href="install.html">Install unpacked</a></li><li><a href="architecture.html">Architecture</a></li><li><a href="https://github.com/TheWizardNexus/DBOPFS-Studio">Source code</a></li></ul></div>
+                <div><h2>Trust</h2><ul><li><a href="privacy.html">Privacy policy</a></li><li><a href="https://github.com/TheWizardNexus/DBOPFS-Studio/blob/main/SECURITY.md">Security policy</a></li><li><a href="license.html">License &amp; notices</a></li></ul></div>
+                <div><h2>Ecosystem</h2><ul><li><a href="https://thewizardnexus.github.io/DBOPFS/">DBOPFS</a></li><li><a href="https://www.thewizardnexus.com/">The Wizard Nexus</a></li><li><a href="https://github.com/TheWizardNexus">GitHub organization</a></li></ul></div>
+            </div>
+            <div class="footer-meta"><span>© <span data-current-year></span> The Wizard Nexus</span><span>Source-available · PolyForm Noncommercial 1.0.0</span></div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,44 @@
+name: Publish extension release
+
+on:
+  push:
+    tags:
+      - v*
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Validate and publish package
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Install Chrome for browser tests
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Verify release tag
+        run: node scripts/check-release-tag.mjs "$GITHUB_REF_NAME"
+
+      - name: Test and package release
+        run: npm run release:test
+        env:
+          CI: 'true'
+
+      - name: Publish GitHub release
+        run: gh release create "$GITHUB_REF_NAME" artifacts/*.zip artifacts/*.sha256 --generate-notes --verify-tag
+        env:
+          GH_TOKEN: ${{ github.token }}

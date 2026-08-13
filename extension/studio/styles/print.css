@@ -1,0 +1,10 @@
+:root { color-scheme: light; }
+body { background: white; color: black; overflow: visible; }
+.command-bar, .rail, .navigator, .inspector, .status-bar, .header-actions, .explorer-toolbar { display: none!important; }
+.app-shell { display: block; height: auto; min-width: 0; }
+.workspace { overflow: visible; }
+.view { display: none!important; padding: 0; }
+.view.is-active { display: block!important; }
+.metric-card, .surface, .record-table-wrap { background: white; border: 1px solid #777; box-shadow: none; break-inside: avoid; color: black; }
+h1, h2, .metric-card strong { color: black; }
+.eyebrow, .metric-card p, .metric-card small, .view-lede, td, th { color: #333!important; }

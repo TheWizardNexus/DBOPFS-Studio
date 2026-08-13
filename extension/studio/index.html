@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#050c17">
+  <title>DBOPFS Studio</title>
+  <link rel="stylesheet" href="styles/tokens.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/shell.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/print.css" media="print">
+</head>
+<body>
+  <a class="skip-link" href="#workspace">Skip to workspace</a>
+  <div class="app-shell">
+    <header class="command-bar">
+      <a class="product" href="index.html" aria-label="DBOPFS Studio home">
+        <img src="../assets/icons/mark.svg" width="38" height="38" alt="">
+        <span class="product-copy"><strong>DBOPFS</strong><small>Studio</small></span>
+      </a>
+      <button class="origin-switcher" id="origin-switcher" type="button" aria-label="Connected origin">
+        <span class="connection-dot" aria-hidden="true"></span>
+        <span id="origin-label">Connecting…</span>
+      </button>
+      <label class="command-search">
+        <span class="sr-only">Filter files and records</span>
+        <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"></circle><path d="m16 16 4 4"></path></svg>
+        <input id="global-search" type="search" placeholder="Filter tables and records…" autocomplete="off">
+        <kbd>/</kbd>
+      </label>
+      <div class="command-actions">
+        <button class="icon-button" id="refresh-button" type="button" title="Refresh storage" aria-label="Refresh storage">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20 6v5h-5"></path><path d="M19 11a7 7 0 1 0 1 5"></path></svg>
+        </button>
+        <button class="icon-button" id="help-button" type="button" title="About DBOPFS Studio" aria-label="About DBOPFS Studio">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M9.8 9a2.3 2.3 0 1 1 3.6 1.9c-.9.6-1.4 1.1-1.4 2.1"></path><path d="M12 17h.01"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <nav class="rail" aria-label="Studio views">
+      <button class="rail-button is-active" type="button" data-view="dashboard" aria-current="page" title="Dashboard">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6"></rect><rect x="14" y="4" width="6" height="6"></rect><rect x="4" y="14" width="6" height="6"></rect><rect x="14" y="14" width="6" height="6"></rect></svg>
+        <span>Dashboard</span>
+      </button>
+      <button class="rail-button" type="button" data-view="explorer" title="Explorer">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 7h7l2 2h9v10H3z"></path><path d="M3 7V5h7l2 2"></path></svg>
+        <span>Explorer</span>
+      </button>
+      <button class="rail-button" type="button" data-view="activity" title="Activity">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h3l2-6 4 12 2-6h5"></path></svg>
+        <span>Activity</span>
+      </button>
+      <span class="rail-spacer"></span>
+      <a class="rail-button" href="https://thewizardnexus.github.io/DBOPFS/" target="_blank" rel="noreferrer" title="DBOPFS documentation">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 4h9l3 3v13H6z"></path><path d="M15 4v4h4"></path><path d="M9 12h6M9 16h6"></path></svg>
+        <span>Docs</span>
+      </a>
+    </nav>
+
+    <aside class="navigator" aria-label="DBOPFS navigator">
+      <div class="panel-heading">
+        <div><p class="eyebrow">Data navigator</p><h2>Applications</h2></div>
+        <button class="mini-button" id="new-app-button" type="button" title="Open an application" aria-label="Open an application">+</button>
+      </div>
+      <div id="tree" class="tree" role="tree" aria-label="DBOPFS applications and tables"></div>
+      <div class="navigator-foot">
+        <span class="status-light"></span>
+        <span><strong>Local only</strong><small>No data leaves this browser</small></span>
+      </div>
+    </aside>
+
+    <main id="workspace" class="workspace" tabindex="-1">
+      <section class="view is-active" id="dashboard-view" data-view-panel="dashboard" aria-labelledby="dashboard-title">
+        <div class="view-header">
+          <div><p class="eyebrow">Browser-native persistence</p><h1 id="dashboard-title">Storage observatory</h1><p class="view-lede">A live view of DBOPFS applications stored by this origin.</p></div>
+          <div class="header-actions"><button class="button secondary" id="export-app-button" type="button" disabled>Export application</button><button class="button" id="browse-button" type="button">Browse records</button></div>
+        </div>
+        <div class="metric-grid" aria-label="Storage metrics">
+          <article class="metric-card metric-orbit">
+            <div class="orbit" aria-hidden="true"><span id="usage-orbit"></span></div>
+            <div><p>Origin usage</p><strong id="usage-value">—</strong><small id="quota-value">Quota unavailable</small></div>
+          </article>
+          <article class="metric-card"><p>DBOPFS apps</p><strong id="apps-value">—</strong><small>Application namespaces</small></article>
+          <article class="metric-card"><p>Tables</p><strong id="tables-value">—</strong><small>Across discovered apps</small></article>
+          <article class="metric-card"><p>Records</p><strong id="records-value">—</strong><small id="records-detail">Awaiting connection</small></article>
+        </div>
+        <div class="dashboard-grid">
+          <section class="surface application-list" aria-labelledby="applications-title">
+            <div class="surface-heading"><div><p class="eyebrow">Namespaces</p><h2 id="applications-title">DBOPFS applications</h2></div><span class="chip" id="persistence-chip">Checking persistence</span></div>
+            <div id="application-cards" class="application-cards"></div>
+          </section>
+          <section class="surface storage-profile" aria-labelledby="profile-title">
+            <div class="surface-heading"><div><p class="eyebrow">Origin profile</p><h2 id="profile-title">Storage health</h2></div></div>
+            <dl class="profile-list">
+              <div><dt>Origin</dt><dd id="profile-origin">—</dd></div>
+              <div><dt>Persistence</dt><dd id="profile-persistence">—</dd></div>
+              <div><dt>OPFS</dt><dd id="profile-opfs">—</dd></div>
+              <div><dt>DBOPFS module</dt><dd id="profile-module">Loading…</dd></div>
+            </dl>
+            <div class="callout"><strong>Local by design.</strong><p>Studio works against this origin’s DBOPFS data inside your current browser profile.</p></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="view" id="explorer-view" data-view-panel="explorer" aria-labelledby="explorer-title">
+        <div class="explorer-toolbar">
+          <nav class="breadcrumbs" id="breadcrumbs" aria-label="Current path"></nav>
+          <div class="header-actions">
+            <button class="button ghost" id="new-table-button" type="button">New table</button>
+            <button class="button ghost" id="new-record-button" type="button">New record</button>
+            <label class="button secondary file-input" id="import-label">Import<input id="import-input" type="file" multiple></label>
+          </div>
+        </div>
+        <div class="record-table-wrap">
+          <table class="record-table">
+            <thead><tr><th scope="col">Name</th><th scope="col">Type</th><th scope="col">Size</th><th scope="col">Modified</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead>
+            <tbody id="record-rows"></tbody>
+          </table>
+          <div class="empty-state" id="records-empty" hidden>
+            <div class="empty-sigil" aria-hidden="true"><span></span></div>
+            <p class="eyebrow">A database, written in files</p><h2 id="records-empty-title">No records here yet.</h2><p id="records-empty-copy">Create a record or import a file into this table.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="activity-view" data-view-panel="activity" aria-labelledby="activity-title">
+        <div class="view-header"><div><p class="eyebrow">Session history</p><h1 id="activity-title">Activity</h1><p class="view-lede">Operations performed during this Studio session.</p></div><button class="button ghost" id="clear-activity" type="button">Clear</button></div>
+        <ol class="activity-list" id="activity-list"></ol>
+      </section>
+    </main>
+
+    <aside class="inspector" id="inspector" aria-label="Record inspector">
+      <div class="inspector-empty" id="inspector-empty"><span class="inspector-glyph" aria-hidden="true"></span><p>Select a record to inspect, preview, or edit it.</p></div>
+      <div class="inspector-content" id="inspector-content" hidden>
+        <div class="panel-heading inspector-heading"><div><p class="eyebrow">Record inspector</p><h2 id="inspector-name">Record</h2></div><button class="icon-button" id="close-inspector" type="button" aria-label="Close inspector">×</button></div>
+        <dl class="metadata-list"><div><dt>Path</dt><dd id="inspector-path">—</dd></div><div><dt>Type</dt><dd id="inspector-type">—</dd></div><div><dt>Size</dt><dd id="inspector-size">—</dd></div><div><dt>Modified</dt><dd id="inspector-modified">—</dd></div></dl>
+        <div class="preview" id="preview"></div>
+        <label class="editor-label" for="record-editor">Contents</label>
+        <textarea id="record-editor" class="record-editor" spellcheck="false"></textarea>
+        <p class="editor-status" id="editor-status">No unsaved changes</p>
+        <div class="inspector-actions"><button class="button" id="save-record" type="button">Save changes</button><button class="button secondary" id="open-native" type="button" hidden>Open in browser</button><button class="button ghost" id="print-record" type="button">Print</button><button class="button ghost danger" id="delete-record" type="button">Delete</button></div>
+      </div>
+    </aside>
+
+    <footer class="status-bar">
+      <span><span class="connection-dot" aria-hidden="true"></span><span id="status-connection">Connecting</span></span>
+      <span id="status-selection">No application selected</span>
+      <span class="status-spacer"></span>
+      <span>DBOPFS Studio 0.1.0</span>
+    </footer>
+  </div>
+
+  <dialog id="form-dialog" class="dialog">
+    <form method="dialog" id="dialog-form">
+      <p class="eyebrow" id="dialog-eyebrow">DBOPFS Studio</p>
+      <h2 id="dialog-title">Create item</h2>
+      <p id="dialog-description"></p>
+      <label id="dialog-field-label">Name<input id="dialog-input" name="value" autocomplete="off" required></label>
+      <p class="form-error" id="dialog-error" role="alert"></p>
+      <div class="dialog-actions"><button class="button ghost" value="cancel" type="button" id="dialog-cancel">Cancel</button><button class="button" value="confirm" type="submit" id="dialog-confirm">Continue</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="about-dialog" class="dialog about-dialog">
+    <div><img src="../assets/icons/mark.svg" width="64" height="64" alt=""><p class="eyebrow">Where WiZdom Meets Innovation</p><h2>DBOPFS Studio</h2><p>A DBOPFS-powered workspace for inspecting and managing origin-private application data in Chromium browsers.</p><p>PDF files open in your browser’s native viewer for its available viewing, editing, saving, and printing tools.</p><button class="button" id="about-close" type="button">Close</button></div>
+  </dialog>
+
+  <div class="toast-region" id="toasts" aria-live="polite" aria-atomic="true"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

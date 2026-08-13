@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Validate, test, and package
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Install Chrome for browser tests
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Audit development tooling
+        run: npm audit --audit-level=high
+
+      - name: Test release in Chrome
+        run: npm run release:test
+        env:
+          CI: 'true'
+
+      - name: Upload coverage and extension package
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dbopfs-studio-ci-${{ github.sha }}
+          path: |
+            artifacts/*.zip
+            artifacts/*.sha256
+            coverage/*.json
+          if-no-files-found: warn
+          retention-days: 14

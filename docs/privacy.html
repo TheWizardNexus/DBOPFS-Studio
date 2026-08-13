@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="DBOPFS Studio privacy policy: local browser processing, explicit origin access, no analytics, and user-controlled exports.">
+    <meta name="theme-color" content="#050b16">
+    <link rel="icon" href="data:,">
+    <link rel="canonical" href="https://thewizardnexus.github.io/DBOPFS-Studio/privacy.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="DBOPFS Studio privacy policy">
+    <meta property="og:description" content="How DBOPFS Studio accesses and processes OPFS data locally in your browser.">
+    <title>Privacy — DBOPFS Studio</title>
+    <link rel="stylesheet" href="assets/site.css">
+    <script type="module" src="assets/site.js"></script>
+</head>
+<body data-page="privacy">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="brand" href="index.html" aria-label="DBOPFS Studio home"><span class="brand-mark" aria-hidden="true"></span><span class="brand-copy"><strong>DBOPFS Studio</strong><small>The Wizard Nexus</small></span></a>
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation"><span class="nav-toggle__icon" aria-hidden="true"></span><span>Menu</span></button>
+            <nav class="site-nav" id="site-navigation" aria-label="Primary navigation"><a href="index.html" data-nav="home">Overview</a><a href="install.html" data-nav="install">Install</a><a href="architecture.html" data-nav="architecture">Architecture</a><a href="privacy.html" data-nav="privacy">Privacy</a><a href="https://github.com/TheWizardNexus/DBOPFS-Studio">GitHub</a></nav>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <section class="page-hero">
+            <div class="wrap">
+                <p class="eyebrow">Privacy policy · Effective August 13, 2026</p>
+                <h1>Local data stays local.</h1>
+                <p class="page-lede">DBOPFS Studio is designed to inspect and manage OPFS content inside your Chromium browser. It does not require an account and is not designed to send inspected site data to The Wizard Nexus.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="wrap page-layout">
+                <article class="prose">
+                    <h2 id="summary">Plain-language summary</h2>
+                    <div class="card-grid two">
+                        <div class="card"><h3>Visible target</h3><p>You connect DBOPFS Studio to a specific live tab. That origin remains visible while you work.</p></div>
+                        <div class="card"><h3>Browser processing</h3><p>File and record inspection, editing, and preview happen locally unless you choose an external destination.</p></div>
+                        <div class="card"><h3>No Studio account</h3><p>The extension does not require a DBOPFS Studio sign-in, cloud database, analytics profile, or advertising identifier.</p></div>
+                        <div class="card"><h3>Your exports</h3><p>Downloads, clipboard copies, and print jobs leave OPFS at your direction and are then controlled by your device and chosen destination.</p></div>
+                    </div>
+
+                    <h2 id="access">Data DBOPFS Studio accesses</h2>
+                    <p>The extension is permitted to run an isolated bridge on HTTP(S) pages. When you connect its workspace to an active tab or inspected page, DBOPFS Studio may access the information needed to provide its interface:</p>
+                    <ul>
+                        <li>the connected site's origin;</li>
+                        <li>OPFS directory names, file names, file metadata, and file contents;</li>
+                        <li>DBOPFS application IDs, table names, record keys, and record values;</li>
+                        <li>browser-reported storage usage, quota, and persistence state.</li>
+                    </ul>
+                    <p>This access supports the DBOPFS dashboard, explorer, editor, previews, imports, application exports, supported record printing, and record-management actions you request.</p>
+
+                    <h2 id="collection">Collection and transmission</h2>
+                    <p>DBOPFS Studio is designed <strong>not to transmit inspected OPFS contents, file names, record values, or browsing history to The Wizard Nexus</strong> or to an analytics, advertising, or profiling service. Processing occurs in the browser unless you deliberately export, download, print, or copy data to another destination.</p>
+                    <p>The browser, browser extension store, GitHub, operating system, selected printer, synchronization software, or a link you open may process information under its own terms. Those services are outside DBOPFS Studio's control.</p>
+
+                    <h2 id="permissions">Why the extension asks for access</h2>
+                    <div class="permission-list">
+                        <div class="permission-row"><code>Website access</code><span>Runs a dormant isolated bridge on HTTP(S) pages so the Studio can send a request to its selected tab. The lazily imported isolated-world agent makes OPFS calls under that website's origin.</span></div>
+                        <div class="permission-row"><code>Storage</code><span>Temporarily hands a selected record to Studio's extension-owned print page; the print page removes it immediately after reading.</span></div>
+                    </div>
+                    <p>The manifest also declares narrowly scoped web-accessible extension modules needed by that isolated agent. This is a resource-loading declaration, not permission to upload inspected data.</p>
+
+                    <h2 id="retention">Storage and retention</h2>
+                    <p>Site data remains in that site's browser-managed OPFS until the site, user, browser, or operating system changes or removes it. For supported record printing, Studio places one temporary payload in extension session storage; the print page removes it as soon as it reads it, and the browser also discards session storage when the extension is reloaded or restarted. The extension does not create a remote backup or synchronization service.</p>
+                    <p>Exports and downloads remain wherever you save them. Clipboard content is controlled by your operating system and clipboard tools. Print output and spool data are controlled by the browser, operating system, and printer.</p>
+
+                    <h2 id="control">Your controls</h2>
+                    <p>You can:</p>
+                    <ul>
+                        <li>close Studio or the selected site tab;</li>
+                        <li>review and revoke extension site access in the browser;</li>
+                        <li>close or uninstall DBOPFS Studio;</li>
+                        <li>remove exported files and clear clipboard history using device controls; and</li>
+                        <li>delete individual DBOPFS records in Studio, or clear broader site data using the site or browser storage controls.</li>
+                    </ul>
+                    <div class="callout warning"><p><strong>Deletion can break the owning application.</strong> DBOPFS Studio guards destructive actions, but it cannot recreate deleted data without a backup.</p></div>
+
+                    <h2 id="origin">Origin isolation</h2>
+                    <p>OPFS is separated by origin and, in some configurations, by additional storage partitioning. DBOPFS Studio does not merge unrelated origins into one live filesystem. It needs a live active or inspected page and the browser-granted access required for that origin.</p>
+                    <p>A DBOPFS application ID separates trusted applications into folders inside an origin. It is not protection against hostile code already running on that same origin. See the <a href="architecture.html#origin-boundary">origin and trust model</a>.</p>
+
+                    <h2 id="children">Children's privacy</h2>
+                    <p>DBOPFS Studio is a developer and data-management tool and is not directed to children. The extension is not designed to collect personal information from any user.</p>
+
+                    <h2 id="changes">Changes and contact</h2>
+                    <p>Material changes will be published in this repository and reflected by an updated effective date. For privacy questions, use the contact path published by <a href="https://www.thewizardnexus.com/">The Wizard Nexus</a>. Do not include private site data, credentials, or sensitive files in a public issue.</p>
+                    <p>The repository copy of <a href="https://github.com/TheWizardNexus/DBOPFS-Studio/blob/main/PRIVACY.md">PRIVACY.md</a> is distributed with the source.</p>
+                </article>
+
+                <aside class="page-toc" aria-label="On this page">
+                    <strong>On this page</strong>
+                    <a href="#summary">Summary</a><a href="#access">Data accessed</a><a href="#collection">Collection</a><a href="#permissions">Permissions</a><a href="#retention">Retention</a><a href="#control">Your controls</a><a href="#origin">Origin isolation</a><a href="#children">Children</a><a href="#changes">Changes</a>
+                </aside>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap">
+            <div class="footer-grid">
+                <div><h2>DBOPFS Studio</h2><p>A browser-native data workspace by The Wizard Nexus. Where WiZdom Meets Innovation.</p></div>
+                <div><h2>Use</h2><ul><li><a href="install.html">Install unpacked</a></li><li><a href="architecture.html">Architecture</a></li><li><a href="https://github.com/TheWizardNexus/DBOPFS-Studio">Source code</a></li></ul></div>
+                <div><h2>Trust</h2><ul><li><a href="privacy.html">Privacy policy</a></li><li><a href="https://github.com/TheWizardNexus/DBOPFS-Studio/blob/main/SECURITY.md">Security policy</a></li><li><a href="license.html">License &amp; notices</a></li></ul></div>
+                <div><h2>Ecosystem</h2><ul><li><a href="https://thewizardnexus.github.io/DBOPFS/">DBOPFS</a></li><li><a href="https://www.thewizardnexus.com/">The Wizard Nexus</a></li><li><a href="https://github.com/TheWizardNexus">GitHub organization</a></li></ul></div>
+            </div>
+            <div class="footer-meta"><span>© <span data-current-year></span> The Wizard Nexus</span><span>Source-available · PolyForm Noncommercial 1.0.0</span></div>
+        </div>
+    </footer>
+</body>
+</html>
