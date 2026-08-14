@@ -1,4 +1,11 @@
+[![DBOPFS Studio — a DBOPFS-powered workspace for Chromium browsers](assets/dbopfs-studio-readme-header.png)](https://thewizardnexus.github.io/DBOPFS-Studio/)
+
 # DBOPFS Studio
+
+[![CI](https://github.com/TheWizardNexus/DBOPFS-Studio/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/TheWizardNexus/DBOPFS-Studio/actions/workflows/ci.yml)
+[![GitHub Pages](https://github.com/TheWizardNexus/DBOPFS-Studio/actions/workflows/pages.yml/badge.svg?branch=main)](https://github.com/TheWizardNexus/DBOPFS-Studio/actions/workflows/pages.yml)
+[![version 0.1.0](https://img.shields.io/badge/version-0.1.0-ab94ff)](extension/manifest.json)
+[![PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/license-PolyForm%20Noncommercial%201.0.0-d7a84d)](LICENSE)
 
 DBOPFS Studio is a DBOPFS-powered workspace for exploring, editing, previewing,
 printing, and managing DBOPFS application data stored in the Origin Private
