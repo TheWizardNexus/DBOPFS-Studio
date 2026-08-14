@@ -33,6 +33,11 @@ The Wizard Nexus. OPFS remains isolated by site origin, so Studio works with
 one selected live HTTP(S) page at a time rather than pretending every closed
 site is a mounted global drive.
 
+Commercial licenses are one-time purchases for the licensed version. There is
+no monthly subscription or mandatory recurring DBOPFS Studio license fee after
+purchase. Optional support, future major-version upgrades, and third-party
+services may have separate costs.
+
 Chrome and Microsoft Edge are first-class targets. Brave, Vivaldi, Opera, and
 other current Chromium browsers are compatibility targets when their extension
 policy and OPFS APIs provide the required capabilities.

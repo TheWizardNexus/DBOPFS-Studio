@@ -4,9 +4,12 @@ DBOPFS Studio and its bundled DBOPFS runtime are publicly available under the
 PolyForm Noncommercial License 1.0.0. That public license does not grant
 commercial use.
 
-A separate commercial license is available from The Wizard Nexus for a nominal
-fee. The commercial license takes effect only after both sides agree to its
-written terms and the applicable fee is paid. Downloading the extension,
+A separate commercial license is available from The Wizard Nexus for a nominal,
+one-time fee. The licensed version has no monthly subscription or mandatory
+recurring DBOPFS Studio license fee after that initial purchase. Optional
+support, future major-version upgrades, and third-party services may be priced
+separately. The commercial license takes effect only after both sides agree to
+its written terms and the applicable fee is paid. Downloading the extension,
 opening a request, or discussing a quote does not itself grant commercial
 rights.
 

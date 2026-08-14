@@ -5,6 +5,13 @@ printing, and managing DBOPFS application data stored in the Origin Private
 File System in Chrome, Microsoft Edge, Brave, Vivaldi, Opera, and other
 compatible Chromium browsers.
 
+**Local-first ownership.** DBOPFS Studio runs locally in the browser and
+requires no DBOPFS Studio cloud account. For commercial use, the initial
+license purchase is one-time: there is no monthly subscription or mandatory
+recurring DBOPFS Studio license fee for the purchased version. Optional
+support, future major-version upgrades, and third-party services may have
+separate costs.
+
 The extension treats the bundled [DBOPFS](https://github.com/TheWizardNexus/DBOPFS)
 module as its primary data layer. DBOPFS application folders, tables, and
 records receive first-class navigation and editing tools.
@@ -115,6 +122,11 @@ DBOPFS Studio and the bundled DBOPFS runtime are source-available under the
 [PolyForm Noncommercial License 1.0.0](LICENSE). The public license does not
 grant commercial use. A separate commercial license is available; see
 [COMMERCIAL-LICENSE.md](COMMERCIAL-LICENSE.md).
+
+Commercial licenses use a one-time purchase model for the licensed version,
+with no monthly subscription or mandatory recurring DBOPFS Studio license fee
+after purchase. Optional support, future major-version upgrades, and
+third-party services may be offered separately; the written agreement controls.
 
 Redistributors must preserve the license terms or official license URL and
 every exact `Required Notice:` line in [NOTICE](NOTICE). Bundled-source identity
