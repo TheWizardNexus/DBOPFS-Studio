@@ -37,7 +37,7 @@
             <div class="wrap page-layout">
                 <article class="prose">
                     <h2 id="layers">Four cooperative layers</h2>
-                    <p>The interface lives in an extension-owned workspace, but the storage authority belongs to the connected website. A dormant isolated content script receives a Studio request, lazily imports the packaged DBOPFS agent in its isolated world, performs the operation against the inspected origin's storage, and returns a serializable result through extension messaging.</p>
+                    <p>The interface lives in an extension-owned workspace, opened from either the toolbar popup or the DBOPFS Studio DevTools launcher, but the storage authority belongs to the connected website. A dormant isolated content script receives a Studio request, lazily imports the packaged DBOPFS agent in its isolated world, performs the operation against the inspected origin's storage, and returns a serializable result through extension messaging.</p>
 
                     <div class="diagram" aria-label="DBOPFS Studio data flow">
                         <div class="diagram-box"><strong>Studio workspace</strong><small>Dashboard, tree, editor, preview, confirmation</small></div>

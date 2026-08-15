@@ -198,10 +198,56 @@ async function exercisePageBridge(worker, origin) {
       record: 'record.json',
       text: '{"status":"updated"}'
     });
+    await sendLegacy('createRecord', {
+      applicationId,
+      table,
+      record: 'invalid-utf8.js',
+      text: ''
+    });
+    await sendLegacy('writeRecord', {
+      applicationId,
+      table,
+      record: 'invalid-utf8.js',
+      base64: '/wBh'
+    });
+    await sendLegacy('createRecord', {
+      applicationId,
+      table,
+      record: 'bom.js',
+      text: ''
+    });
+    await sendLegacy('writeRecord', {
+      applicationId,
+      table,
+      record: 'bom.js',
+      base64: '77u/Y29uc3QgeD0xOw=='
+    });
+    const unicodeText = 'café · 漢字 · 🧙';
+    await sendLegacy('createRecord', {
+      applicationId,
+      table,
+      record: 'unicode.md',
+      text: unicodeText
+    });
     const record = await sendLegacy('readRecord', {
       applicationId,
       table,
       record: 'record.json'
+    });
+    const invalidUtf8 = await sendLegacy('readRecord', {
+      applicationId,
+      table,
+      record: 'invalid-utf8.js'
+    });
+    const bom = await sendLegacy('readRecord', {
+      applicationId,
+      table,
+      record: 'bom.js'
+    });
+    const unicode = await sendLegacy('readRecord', {
+      applicationId,
+      table,
+      record: 'unicode.md'
     });
     await sendLegacy('rawWrite', { path: ['coverage.txt'], data: 'raw coverage' });
     const raw = await sendLegacy('rawRead', { path: ['coverage.txt'] });
@@ -218,20 +264,35 @@ async function exercisePageBridge(worker, origin) {
     };
     const connected = await chrome.tabs.sendMessage(tab.id, typedRequest);
     await sendLegacy('deleteRecord', { applicationId, table, record: 'record.json' });
+    await sendLegacy('deleteRecord', { applicationId, table, record: 'invalid-utf8.js' });
+    await sendLegacy('deleteRecord', { applicationId, table, record: 'bom.js' });
+    await sendLegacy('deleteRecord', { applicationId, table, record: 'unicode.md' });
     await sendLegacy('deleteTable', { applicationId, table });
 
     return {
+      bom,
       connected,
       exportText: exported.text,
+      invalidUtf8,
       raw,
       record,
       rootEntries: root.entries,
-      scanned
+      scanned,
+      unicode
     };
   }, origin);
 
   if (result.record.text !== '{"status":"updated"}' || result.raw.text !== 'raw coverage') {
     throw new Error('The installed page bridge changed record or raw OPFS contents.');
+  }
+  if (result.invalidUtf8.encoding !== 'base64' || result.invalidUtf8.base64 !== '/wBh') {
+    throw new Error('A text-looking record with invalid UTF-8 was not preserved byte-for-byte.');
+  }
+  if (result.bom.encoding !== 'text' || result.bom.text !== '\uFEFFconst x=1;') {
+    throw new Error('A UTF-8 BOM was not preserved in editable text.');
+  }
+  if (result.unicode.encoding !== 'text' || result.unicode.text !== 'café · 漢字 · 🧙') {
+    throw new Error('Valid multibyte UTF-8 text was not preserved exactly.');
   }
   if (!result.rootEntries.some((entry) => entry.name === 'apps') ||
       !result.rootEntries.some((entry) => entry.name === 'coverage.txt')) {
@@ -247,7 +308,7 @@ async function exercisePageBridge(worker, origin) {
   console.log('PASS Installed page bridge exercised DBOPFS and raw OPFS operations.');
 }
 
-async function smokeTestLoadedExtension(browser, coverageEnabled, origin) {
+async function smokeTestLoadedExtension(browser, coverageEnabled, origin, distractorOrigin) {
   const errors = [];
   const workerTarget = await browser.waitForTarget(
     (target) => target.type() === 'service_worker' &&
@@ -263,8 +324,111 @@ async function smokeTestLoadedExtension(browser, coverageEnabled, origin) {
     throw new Error('Chrome did not load DBOPFS Studio as a Manifest V3 extension.');
   }
   await exercisePageBridge(worker, origin);
-
   const coverageEntries = [];
+
+  const inspectedTabId = await worker.evaluate(async (pageOrigin) => {
+    const [tab] = await chrome.tabs.query({ url: `${pageOrigin}/tests/browser/index.html` });
+    return tab?.id;
+  }, origin);
+  if (!Number.isInteger(inspectedTabId)) {
+    throw new Error('The DevTools launcher test could not identify the inspected tab.');
+  }
+  const distractor = await browser.newPage();
+  await distractor.goto(`${distractorOrigin}/tests/fixture/index.html`, {
+    waitUntil: 'networkidle0',
+    timeout: 30_000
+  });
+  await distractor.waitForFunction(
+    () => globalThis.__DBOPFS_FIXTURE__?.ready === true,
+    { timeout: 20_000 }
+  );
+  await distractor.bringToFront();
+  const devtoolsPanel = await browser.newPage();
+  if (coverageEnabled) {
+    await devtoolsPanel.coverage.startJSCoverage({ resetOnNavigation: false });
+  }
+  await devtoolsPanel.goto(
+    `chrome-extension://${runtime.id}/devtools/panel.html?tab=${inspectedTabId}`,
+    { waitUntil: 'networkidle0', timeout: 30_000 }
+  );
+  await devtoolsPanel.waitForFunction(
+    (pageOrigin) => document.querySelector('#site-title')?.textContent === pageOrigin,
+    { timeout: 10_000 },
+    origin
+  );
+  await distractor.bringToFront();
+  const standaloneUrl = `chrome-extension://${runtime.id}/studio/index.html?tab=${inspectedTabId}`;
+  const standaloneTargetPromise = browser.waitForTarget(
+    (target) => target.url() === standaloneUrl,
+    { timeout: 15_000 }
+  );
+  await devtoolsPanel.evaluate(() => document.querySelector('#open-studio-window')?.click());
+  let standaloneTarget;
+  try {
+    standaloneTarget = await standaloneTargetPromise;
+  } catch (error) {
+    const panelState = await devtoolsPanel.evaluate(() => ({
+      disabled: document.querySelector('#open-studio-window')?.disabled,
+      status: document.querySelector('#site-status')?.textContent
+    }));
+    const targetUrls = browser.targets().map((target) => target.url());
+    throw new Error(
+      `The DevTools Studio window did not open: ${JSON.stringify({ panelState, targetUrls })}`,
+      { cause: error }
+    );
+  }
+  const standaloneStudio = await standaloneTarget.asPage();
+  try {
+    await standaloneStudio.waitForFunction(
+      (pageOrigin) => document.querySelector('#status-connection')?.textContent === 'Connected' &&
+        document.querySelector('#origin-label')?.textContent === pageOrigin &&
+        document.querySelector('[data-open-app="browser-coverage"]'),
+      { timeout: 15_000 },
+      origin
+    );
+  } catch (error) {
+    const studioState = await standaloneStudio.evaluate(() => ({
+      applications: Array.from(document.querySelectorAll('[data-open-app]'), (item) => item.dataset.openApp),
+      connection: document.querySelector('#status-connection')?.textContent,
+      origin: document.querySelector('#origin-label')?.textContent,
+      toasts: Array.from(document.querySelectorAll('.toast'), (item) => item.textContent)
+    }));
+    throw new Error(`The DevTools Studio bound the wrong origin: ${JSON.stringify(studioState)}`, {
+      cause: error
+    });
+  }
+  const reuseResponse = await devtoolsPanel.evaluate(async (tabId) => chrome.runtime.sendMessage({
+    channel: 'dbopfs-studio:background',
+    action: 'openStudioWindow',
+    tabId
+  }), inspectedTabId);
+  if (!reuseResponse?.ok) {
+    throw new Error(`The DevTools Studio window could not be reused: ${reuseResponse?.error}`);
+  }
+  const standaloneCount = browser.targets()
+    .filter((target) => target.type() === 'page' && target.url() === standaloneUrl)
+    .length;
+  if (standaloneCount !== 1) {
+    const browserState = await worker.evaluate(async () => ({
+      tabs: (await chrome.tabs.query({})).map((tab) => ({
+        id: tab.id,
+        pendingUrl: tab.pendingUrl,
+        url: tab.url,
+        windowId: tab.windowId
+      })),
+      windows: (await chrome.windows.getAll()).map((item) => ({ id: item.id, type: item.type }))
+    }));
+    throw new Error(
+      `The DevTools launcher duplicated its Studio window: ${JSON.stringify({ standaloneCount, browserState })}`
+    );
+  }
+  await standaloneStudio.close();
+  if (coverageEnabled) {
+    coverageEntries.push(...await devtoolsPanel.coverage.stopJSCoverage());
+  }
+  await devtoolsPanel.close();
+  await distractor.close();
+
   const popup = await browser.newPage();
   if (coverageEnabled) {
     await popup.coverage.startJSCoverage({ resetOnNavigation: false });
@@ -295,6 +459,11 @@ async function smokeTestLoadedExtension(browser, coverageEnabled, origin) {
     () => document.querySelector('#status-connection')?.textContent === 'Connected',
     { timeout: 15_000 }
   );
+  const boundStudioUrl = studio.url();
+  await studio.click('.product');
+  if (studio.url() !== boundStudioUrl) {
+    throw new Error('The Studio brand control discarded its bound tab URL.');
+  }
   await studio.evaluate(() => document.querySelector('[data-open-app]')?.click());
   await studio.waitForSelector('#record-rows tr');
   const emptyState = await studio.evaluate(() => {
@@ -346,9 +515,15 @@ async function smokeTestLoadedExtension(browser, coverageEnabled, origin) {
   });
   await studio.evaluate(() => {
     globalThis.__DBOPFS_NATIVE_OPENS__ = [];
+    globalThis.__DBOPFS_REVOKED_URLS__ = [];
     window.open = (...argumentsList) => {
       globalThis.__DBOPFS_NATIVE_OPENS__.push(argumentsList);
       return null;
+    };
+    const revokeObjectUrl = URL.revokeObjectURL.bind(URL);
+    URL.revokeObjectURL = (url) => {
+      globalThis.__DBOPFS_REVOKED_URLS__.push(url);
+      revokeObjectUrl(url);
     };
     document.querySelector('[data-app="arcane-library"][data-table="documents"]')?.click();
   });
@@ -356,18 +531,36 @@ async function smokeTestLoadedExtension(browser, coverageEnabled, origin) {
     visible: true,
     timeout: 10_000
   });
-  await studio.click('[data-record="constellation-map.pdf"]');
+  await studio.evaluate(() => {
+    document.querySelector('[data-record="constellation-map.pdf"]')?.click();
+    document.querySelector('[data-record="readme.md"]')?.click();
+  });
+  await studio.waitForFunction(
+    () => document.querySelector('#inspector-name')?.textContent === 'readme.md' &&
+      document.querySelector('#preview h1')?.textContent === 'readme.md',
+    { timeout: 10_000 }
+  );
+  await studio.evaluate(() => new Promise((resolve) => setTimeout(resolve, 140)));
+  const racedRecordState = await studio.evaluate(() => ({
+    inspector: document.querySelector('#inspector-name')?.textContent,
+    source: document.querySelector('#record-editor')?.value
+  }));
+  if (racedRecordState.inspector !== 'readme.md' ||
+      !racedRecordState.source?.startsWith('# readme.md')) {
+    throw new Error(`A stale record read replaced the current inspector: ${JSON.stringify(racedRecordState)}`);
+  }
+  await studio.evaluate(() => document.querySelector('[data-record="constellation-map.pdf"]')?.click());
   try {
     await studio.waitForFunction(
       () => document.querySelector('#inspector-content')?.hidden === false &&
-        document.querySelector('#record-editor')?.hidden === true &&
+        document.querySelector('#record-source')?.hidden === true &&
         document.querySelector('#save-record')?.hidden === true &&
         document.querySelector('#open-native')?.hidden === false,
       { timeout: 10_000 }
     );
   } catch (error) {
     const state = await studio.evaluate(() => ({
-      editorHidden: document.querySelector('#record-editor')?.hidden,
+      sourceHidden: document.querySelector('#record-source')?.hidden,
       inspectorHidden: document.querySelector('#inspector-content')?.hidden,
       nativeHidden: document.querySelector('#open-native')?.hidden,
       saveHidden: document.querySelector('#save-record')?.hidden,
@@ -377,13 +570,14 @@ async function smokeTestLoadedExtension(browser, coverageEnabled, origin) {
     throw new Error(`The PDF inspector did not open: ${JSON.stringify(state)}`, { cause: error });
   }
   const pdfState = await studio.evaluate(() => ({
-    editorHidden: document.querySelector('#record-editor').hidden,
+    sourceHidden: document.querySelector('#record-source').hidden,
     nativeHidden: document.querySelector('#open-native').hidden,
     nativeLabel: document.querySelector('#open-native').textContent,
+    objectType: document.querySelector('#preview')?.querySelector('.native-file-card') ? 'application/pdf' : '',
     previewText: document.querySelector('#preview').textContent,
     saveHidden: document.querySelector('#save-record').hidden
   }));
-  if (!pdfState.editorHidden || !pdfState.saveHidden || pdfState.nativeHidden ||
+  if (!pdfState.sourceHidden || !pdfState.saveHidden || pdfState.nativeHidden ||
       !/PDF viewer/i.test(pdfState.nativeLabel) || !/PDF/i.test(pdfState.previewText)) {
     throw new Error(`The PDF preview did not route to Chromium's native viewer: ${JSON.stringify(pdfState)}`);
   }
@@ -392,6 +586,122 @@ async function smokeTestLoadedExtension(browser, coverageEnabled, origin) {
   const nativeOpen = await studio.evaluate(() => globalThis.__DBOPFS_NATIVE_OPENS__[0]);
   if (!String(nativeOpen[0]).startsWith('blob:') || nativeOpen[1] !== '_blank') {
     throw new Error(`PDF printing did not use the native-open route: ${JSON.stringify(nativeOpen)}`);
+  }
+
+  await studio.evaluate(() => document.querySelector('[data-record="readme.md"]')?.click());
+  try {
+    await studio.waitForFunction(
+      () => document.querySelector('#viewer-mode')?.textContent === 'Rendered' &&
+        document.querySelector('#preview')?.hidden === false &&
+        document.querySelector('#preview h1')?.textContent === 'readme.md',
+      { timeout: 10_000 }
+    );
+  } catch (error) {
+    const state = await studio.evaluate(() => ({
+      heading: document.querySelector('#preview h1')?.textContent,
+      inspector: document.querySelector('#inspector-name')?.textContent,
+      preview: document.querySelector('#preview')?.textContent,
+      previewHidden: document.querySelector('#preview')?.hidden,
+      source: document.querySelector('#record-editor')?.value,
+      sourceHidden: document.querySelector('#record-source')?.hidden,
+      toasts: Array.from(document.querySelectorAll('.toast'), (item) => item.textContent),
+      viewerLabel: document.querySelector('#viewer-mode')?.textContent
+    }));
+    throw new Error(`The Markdown viewer did not open: ${JSON.stringify(state)}`, { cause: error });
+  }
+  const markdownState = await studio.evaluate(() => ({
+    raw: document.querySelector('#record-editor')?.value,
+    rendered: document.querySelector('#preview')?.textContent,
+    revoked: globalThis.__DBOPFS_REVOKED_URLS__?.length || 0,
+    sourceHidden: document.querySelector('#record-source')?.hidden,
+    viewerSelected: document.querySelector('#viewer-mode')?.getAttribute('aria-selected')
+  }));
+  if (!markdownState.raw?.startsWith('# readme.md') || !markdownState.rendered?.includes('DBOPFS') ||
+      !markdownState.sourceHidden || markdownState.viewerSelected !== 'true' || markdownState.revoked < 1) {
+    throw new Error(`Markdown did not render without changing its source: ${JSON.stringify(markdownState)}`);
+  }
+  await studio.click('#source-mode');
+  const sourceState = await studio.evaluate(() => ({
+    previewHidden: document.querySelector('#preview')?.hidden,
+    raw: document.querySelector('#record-editor')?.value,
+    sourceHidden: document.querySelector('#record-source')?.hidden
+  }));
+  if (!sourceState.previewHidden || sourceState.sourceHidden || !sourceState.raw?.startsWith('# readme.md')) {
+    throw new Error(`Markdown source mode is unavailable: ${JSON.stringify(sourceState)}`);
+  }
+  await studio.focus('#source-mode');
+  await studio.keyboard.press('ArrowLeft');
+  await studio.waitForFunction(
+    () => document.querySelector('#viewer-mode')?.getAttribute('aria-selected') === 'true' &&
+      document.querySelector('#preview')?.hidden === false,
+    { timeout: 10_000 }
+  );
+
+  await studio.evaluate(() => document.querySelector('[data-record="worker.js"]')?.click());
+  await studio.waitForFunction(
+    () => document.querySelector('#viewer-mode')?.textContent === 'Beautified' &&
+      document.querySelector('#preview code')?.textContent?.includes('\n'),
+    { timeout: 10_000 }
+  );
+  const javascriptState = await studio.evaluate(() => ({
+    formatted: document.querySelector('#preview code')?.textContent,
+    raw: document.querySelector('#record-editor')?.value
+  }));
+  if (javascriptState.raw !== 'export function orbit(items){return items.map((item)=>({name:item.name,active:true}));}' ||
+      javascriptState.formatted === javascriptState.raw || !javascriptState.formatted?.includes('\n')) {
+    throw new Error(`JavaScript formatting changed or failed to format the source: ${JSON.stringify(javascriptState)}`);
+  }
+
+  await studio.click('[data-app="arcane-library"][data-table="images"]');
+  await studio.waitForSelector('[data-record="pixel.png"]', { visible: true, timeout: 10_000 });
+  await studio.evaluate(() => document.querySelector('[data-record="pixel.png"]')?.click());
+  await studio.waitForSelector('#preview img[src^="blob:"]', { visible: true, timeout: 10_000 });
+  const imageState = await studio.evaluate(async () => {
+    const image = document.querySelector('#preview img');
+    await image.decode();
+    const blob = await (await fetch(image.src)).blob();
+    return { height: image.naturalHeight, type: blob.type, width: image.naturalWidth };
+  });
+  if (imageState.type !== 'image/png' || imageState.width !== 1 || imageState.height !== 1) {
+    throw new Error(`The native image preview did not decode correctly: ${JSON.stringify(imageState)}`);
+  }
+  await studio.evaluate(() => document.querySelector('[data-record="sample.mp3"]')?.click());
+  await studio.waitForFunction(
+    () => document.querySelector('#preview audio')?.controls === true &&
+      document.querySelector('#preview audio')?.src.startsWith('blob:') &&
+      document.querySelector('#preview audio')?.readyState >= 1 &&
+      document.querySelector('#preview audio')?.error === null,
+    { timeout: 10_000 }
+  );
+  const audioState = await studio.evaluate(async () => {
+    const media = document.querySelector('#preview audio');
+    const blob = await (await fetch(media.src)).blob();
+    return { duration: media.duration, type: blob.type };
+  });
+  if (audioState.type !== 'audio/mpeg' || !(audioState.duration > 0)) {
+    throw new Error(`The native audio preview did not load metadata: ${JSON.stringify(audioState)}`);
+  }
+  await studio.evaluate(() => document.querySelector('[data-record="sample.mp4"]')?.click());
+  await studio.waitForFunction(
+    () => document.querySelector('#preview video')?.controls === true &&
+      document.querySelector('#preview video')?.src.startsWith('blob:') &&
+      document.querySelector('#preview video')?.readyState >= 1 &&
+      document.querySelector('#preview video')?.error === null,
+    { timeout: 10_000 }
+  );
+  const videoState = await studio.evaluate(async () => {
+    const media = document.querySelector('#preview video');
+    const blob = await (await fetch(media.src)).blob();
+    return {
+      duration: media.duration,
+      height: media.videoHeight,
+      type: blob.type,
+      width: media.videoWidth
+    };
+  });
+  if (videoState.type !== 'video/mp4' || !(videoState.duration > 0) ||
+      videoState.width !== 16 || videoState.height !== 16) {
+    throw new Error(`The native video preview did not load metadata: ${JSON.stringify(videoState)}`);
   }
 
   const studioState = await studio.evaluate(() => ({
@@ -417,10 +727,10 @@ async function smokeTestLoadedExtension(browser, coverageEnabled, origin) {
   await worker.evaluate(async (id) => chrome.storage.session.set({
     [`print:${id}`]: {
       kind: 'text',
-      name: 'coverage.txt',
-      path: 'apps/browser-coverage/notes/coverage.txt',
-      text: 'Printable DBOPFS Studio record',
-      type: 'text/plain'
+      name: 'coverage.md',
+      path: 'apps/browser-coverage/notes/coverage.md',
+      text: '# Printable DBOPFS Studio record\n\n**Rendered safely.** [blocked](javascript:alert(1))\n\n<script>globalThis.compromised=true</script>',
+      type: 'text/markdown'
     }
   }), printId);
   const printPage = await browser.newPage();
@@ -437,10 +747,18 @@ async function smokeTestLoadedExtension(browser, coverageEnabled, origin) {
     timeout: 30_000
   });
   await printPage.waitForFunction(
-    () => document.querySelector('#print-content')?.textContent ===
-      'Printable DBOPFS Studio record' && globalThis.__DBOPFS_PRINT_CALLED__ === true,
+    () => document.querySelector('#print-content h1')?.textContent ===
+      'Printable DBOPFS Studio record' &&
+      document.querySelector('#print-content strong')?.textContent === 'Rendered safely.' &&
+      !document.querySelector('#print-content script, #print-content a') &&
+      globalThis.__DBOPFS_PRINT_CALLED__ === true,
     { timeout: 10_000 }
   );
+  const consumedPrintPayload = await worker.evaluate(async (id) =>
+    (await chrome.storage.session.get(`print:${id}`))[`print:${id}`], printId);
+  if (consumedPrintPayload !== undefined) {
+    throw new Error('The print view did not remove its one-time session payload.');
+  }
   if (coverageEnabled) {
     coverageEntries.push(...await printPage.coverage.stopJSCoverage());
   }
@@ -461,12 +779,14 @@ export async function runBrowserTests(options = {}) {
 
   const executablePath = await findChromium();
   const running = await createStaticServer({ root: projectRoot, host: '127.0.0.1', port: 0 });
+  let distractor;
   let browser;
   let coverageStarted = false;
   let coverageEntries = [];
   const pageErrors = [];
 
   try {
+    distractor = await createStaticServer({ root: projectRoot, host: '127.0.0.1', port: 0 });
     browser = await puppeteer.launch({
       executablePath,
       headless: true,
@@ -497,7 +817,12 @@ export async function runBrowserTests(options = {}) {
     );
     const result = await page.evaluate(() => globalThis.__DBOPFS_TEST_RESULTS__);
 
-    coverageEntries.push(...await smokeTestLoadedExtension(browser, coverageEnabled, running.origin));
+    coverageEntries.push(...await smokeTestLoadedExtension(
+      browser,
+      coverageEnabled,
+      running.origin,
+      distractor.origin
+    ));
     if (coverageStarted) {
       coverageEntries.push(...await page.coverage.stopJSCoverage());
       coverageStarted = false;
@@ -524,7 +849,7 @@ export async function runBrowserTests(options = {}) {
       await pages.at(-1)?.coverage.stopJSCoverage().catch(() => {});
     }
     await browser?.close();
-    await running.close();
+    await Promise.all([running.close(), distractor?.close()]);
   }
 }
 

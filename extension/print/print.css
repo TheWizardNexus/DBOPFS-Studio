@@ -6,6 +6,13 @@ header p { color: #72520f; font-size: 11px; font-weight: 850; letter-spacing: .1
 h1 { color: #050c17; font: 600 34px/1.1 Georgia, serif; margin: 0 0 9px; }
 code { color: #4a5469; font-size: 11px; overflow-wrap: anywhere; }
 pre { background: #f4f1e8; border: 1px solid #c7bfaa; border-radius: 6px; font: 12px/1.6 Consolas, monospace; overflow-wrap: anywhere; padding: 20px; white-space: pre-wrap; }
+.markdown-preview { font: 15px/1.65 Inter, ui-sans-serif, system-ui, sans-serif; }
+.markdown-preview h1, .markdown-preview h2, .markdown-preview h3, .markdown-preview h4, .markdown-preview h5, .markdown-preview h6 { color: #050c17; font-family: Georgia, serif; line-height: 1.25; margin: 1.1em 0 .45em; }
+.markdown-preview blockquote { border-left: 3px solid #d7a84d; color: #4a5469; margin-left: 0; padding-left: 16px; }
+.markdown-preview :not(pre) > code { background: #f4f1e8; border: 1px solid #c7bfaa; border-radius: 3px; padding: 1px 4px; }
+.markdown-preview a { color: #075f5a; }
+.markdown-preview .blocked-markdown-image { border: 1px dashed #c7bfaa; color: #4a5469; display: inline-block; font-size: 11px; padding: 3px 6px; }
+.viewer-notice { border: 1px solid #c7bfaa; color: #4a5469; font-size: 11px; padding: 8px; }
 img { display: block; height: auto; margin: 0 auto; max-width: 100%; }
 .message { border: 1px solid #c7bfaa; padding: 20px; }
 footer { border-top: 1px solid #c7bfaa; color: #687184; font-size: 9px; margin-top: 30px; padding-top: 12px; }

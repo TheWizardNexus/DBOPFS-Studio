@@ -221,6 +221,20 @@ export async function testInstalledExtension() {
     if (!directRead?.ok || directRead.data?.text !== directRecord) {
       throw new Error(`The DBOPFS bridge read/write round trip failed: ${JSON.stringify(directRead)}`);
     }
+    const invalidUtf8Write = await worker.evaluate(async (tabId) => chrome.tabs.sendMessage(tabId, {
+      channel: 'dbopfs-studio',
+      version: 1,
+      action: 'writeRecord',
+      data: {
+        applicationId: 'dbopfs-studio-fixture',
+        table: 'notes',
+        record: 'invalid-utf8.js',
+        base64: '/wBh'
+      }
+    }), fixtureTabId);
+    if (!invalidUtf8Write?.ok) {
+      throw new Error(`Writing the invalid UTF-8 fixture failed: ${JSON.stringify(invalidUtf8Write)}`);
+    }
     const optimisticText = JSON.stringify({ source: 'direct bridge', status: 'optimistic update' });
     const optimisticWrite = await worker.evaluate(async ({ tabId, text, expectedLastModified }) =>
       chrome.tabs.sendMessage(tabId, {
@@ -324,9 +338,11 @@ export async function testInstalledExtension() {
     });
     await studio.click('[data-record="integration.json"]');
     await studio.waitForFunction(
-      () => document.querySelector('#record-editor')?.value.includes('seeded'),
+      () => document.querySelector('#record-editor')?.value.includes('seeded') &&
+        document.querySelector('#viewer-mode')?.textContent === 'Formatted',
       { timeout: 10_000 }
     );
+    await studio.click('#source-mode');
 
     const updatedText = JSON.stringify({ source: 'extension integration', status: 'updated' }, null, 2);
     await studio.evaluate((value) => {
@@ -345,6 +361,15 @@ export async function testInstalledExtension() {
         return value?.status === 'updated' && value?.source === 'extension integration';
       },
       { polling: 100, timeout: 15_000 }
+    );
+    await studio.evaluate(() => document.querySelector('[data-record="invalid-utf8.js"]')?.click());
+    await studio.waitForFunction(
+      () => document.querySelector('#inspector-name')?.textContent === 'invalid-utf8.js' &&
+        document.querySelector('#preview .native-file-card') &&
+        document.querySelector('#record-source')?.hidden === true &&
+        document.querySelector('#save-record')?.hidden === true &&
+        document.querySelector('#open-native')?.hidden === false,
+      { timeout: 10_000 }
     );
 
     if (errors.length) {

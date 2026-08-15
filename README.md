@@ -38,6 +38,9 @@ records receive first-class navigation and editing tools.
   and delete records with exact-name confirmation.
 - Edit and save supported text-based records inline, including JSON validation.
 - Preview browser-supported images, audio, video, and text-based records.
+- Switch between exact source and a read-only viewer for text records. Markdown
+  renders through a local DOM-only renderer, while JSON and JavaScript receive
+  non-destructive formatted views.
 - Open PDFs in the Chromium browser's native PDF experience for viewing and
   printing. DBOPFS Studio does not bundle a PDF rendering library; the exact
   annotation and editing tools depend on the browser build.
@@ -61,7 +64,10 @@ commands, is planned work and is not exposed in the current Studio UI.
    - Microsoft Edge: `edge://extensions`
 3. Enable **Developer mode**.
 4. Choose **Load unpacked** and select this repository's `extension/` folder.
-5. Pin DBOPFS Studio, open a site that uses OPFS, and connect the current tab.
+5. Open a site that uses OPFS and choose either entry path:
+   - Pin DBOPFS Studio and use its toolbar popup to open the Studio in a tab.
+   - Open DevTools, select the **DBOPFS Studio** panel, and open the dedicated
+     Studio window for the inspected page.
 
 The extension is not yet represented as published in a browser extension store.
 See the [installation guide](https://thewizardnexus.github.io/DBOPFS-Studio/install.html)

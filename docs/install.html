@@ -51,7 +51,7 @@
                         <li><strong>Open extension management.</strong>Use your browser's internal extensions page from the table below.</li>
                         <li><strong>Enable Developer mode.</strong>The switch is usually at the top-right or in the extensions-page navigation.</li>
                         <li><strong>Choose Load unpacked.</strong>Select <code>DBOPFS-Studio/extension/</code>—the folder containing <code>manifest.json</code>, not the repository root.</li>
-                        <li><strong>Pin DBOPFS Studio.</strong>Keeping the toolbar action visible makes the connected origin clear and easy to reopen.</li>
+                        <li><strong>Choose an entry path.</strong>Pin DBOPFS Studio to open it from the toolbar, or open DevTools and use the <strong>DBOPFS Studio</strong> panel to launch a dedicated Studio window for the inspected page.</li>
                     </ol>
 
                     <table aria-label="Browser extension management addresses">
@@ -70,7 +70,7 @@
                     </div>
 
                     <h2 id="connect">3. Connect an origin</h2>
-                    <p>Open the website whose storage you intend to inspect. The website must itself have access to OPFS—normally that means HTTPS or localhost. Activate DBOPFS Studio for the current tab, then open its full workspace.</p>
+                    <p>Open the website whose storage you intend to inspect. The website must itself have access to OPFS—normally that means HTTPS or localhost. Use the toolbar popup to open Studio in a browser tab, or open that page’s DevTools, select the DBOPFS Studio panel, and choose <strong>Open Studio window</strong>.</p>
                     <p>The browser grants the extension access to HTTP(S) pages when you install or approve it. A dormant isolated content-script bridge is available on those pages; the Studio sends DBOPFS requests only to the tab you select. On first request, that bridge imports the packaged agent in the same isolated world. Browser storage accessed from a content script remains scoped to the host page's origin, so OPFS resolves to the inspected website rather than the extension.</p>
                     <div class="callout">
                         <p><strong>Check the origin before editing.</strong> Protocol, hostname, and port identify the OPFS boundary. <code>https://app.example</code> and <code>https://admin.example</code> do not share one OPFS root.</p>

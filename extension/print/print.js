@@ -1,3 +1,5 @@
+import { renderTextPreview } from '../shared/viewer.js';
+
 function decodeBase64(value) {
   const binary = atob(value);
   const bytes = new Uint8Array(binary.length);
@@ -24,9 +26,11 @@ async function initialize() {
     await image.decode();
     content.append(image);
   } else if (typeof payload.text === 'string') {
-    const pre = document.createElement('pre');
-    pre.textContent = payload.text;
-    content.append(pre);
+    renderTextPreview(content, {
+      name: payload.name,
+      mime: payload.type,
+      text: payload.text
+    });
   } else {
     const message = document.createElement('p');
     message.className = 'message';

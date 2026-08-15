@@ -16,10 +16,10 @@
   <a class="skip-link" href="#workspace">Skip to workspace</a>
   <div class="app-shell">
     <header class="command-bar">
-      <a class="product" href="index.html" aria-label="DBOPFS Studio home">
+      <span class="product" aria-label="DBOPFS Studio">
         <img src="../assets/icons/mark.svg" width="38" height="38" alt="">
         <span class="product-copy"><strong>DBOPFS</strong><small>Studio</small></span>
-      </a>
+      </span>
       <button class="origin-switcher" id="origin-switcher" type="button" aria-label="Connected origin">
         <span class="connection-dot" aria-hidden="true"></span>
         <span id="origin-label">Connecting…</span>
@@ -137,10 +137,19 @@
       <div class="inspector-content" id="inspector-content" hidden>
         <div class="panel-heading inspector-heading"><div><p class="eyebrow">Record inspector</p><h2 id="inspector-name">Record</h2></div><button class="icon-button" id="close-inspector" type="button" aria-label="Close inspector">×</button></div>
         <dl class="metadata-list"><div><dt>Path</dt><dd id="inspector-path">—</dd></div><div><dt>Type</dt><dd id="inspector-type">—</dd></div><div><dt>Size</dt><dd id="inspector-size">—</dd></div><div><dt>Modified</dt><dd id="inspector-modified">—</dd></div></dl>
-        <div class="preview" id="preview"></div>
-        <label class="editor-label" for="record-editor">Contents</label>
-        <textarea id="record-editor" class="record-editor" spellcheck="false"></textarea>
-        <p class="editor-status" id="editor-status">No unsaved changes</p>
+        <div class="record-mode-bar" id="record-mode-bar" hidden>
+          <span>Contents</span>
+          <div class="record-mode-tabs" role="tablist" aria-label="Record presentation">
+            <button id="viewer-mode" type="button" role="tab" aria-controls="preview" aria-selected="false">Viewer</button>
+            <button id="source-mode" type="button" role="tab" aria-controls="record-source" aria-selected="true">Source</button>
+          </div>
+        </div>
+        <div class="preview record-viewer" id="preview" role="tabpanel" aria-labelledby="viewer-mode"></div>
+        <div id="record-source" class="record-source" role="tabpanel" aria-labelledby="source-mode">
+          <label class="editor-label" for="record-editor">Source</label>
+          <textarea id="record-editor" class="record-editor" spellcheck="false"></textarea>
+          <p class="editor-status" id="editor-status">No unsaved changes</p>
+        </div>
         <div class="inspector-actions"><button class="button" id="save-record" type="button">Save changes</button><button class="button secondary" id="open-native" type="button" hidden>Open in browser</button><button class="button ghost" id="print-record" type="button">Print</button><button class="button ghost danger" id="delete-record" type="button">Delete</button></div>
       </div>
     </aside>

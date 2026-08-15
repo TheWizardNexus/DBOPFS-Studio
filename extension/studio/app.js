@@ -1,6 +1,9 @@
-import { fileKind, formatBytes, formatDate, mimeForFile, safeFilename } from '../shared/format.js';
+import { fileKind, formatBytes, formatDate, nativeMimeForFile, safeFilename } from '../shared/format.js';
+import { renderTextPreview, textViewKind } from '../shared/viewer.js';
 
 const CHANNEL = 'dbopfs-studio';
+const DEMO_MP3_BASE64 = 'SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjYyLjEyLjEwMAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVMQU1FMy4xMDBVVVVVVVVVVVVV/+MYxDsAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MYxHYAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MYxLEAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MYxMQAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV';
+const DEMO_MP4_BASE64 = 'AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMW1wNDEAAAMNbW9vdgAAAGxtdmhkAAAAAAAAAAAAAAAAAAAD6AAAAfQAAQAAAQAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAjd0cmFrAAAAXHRraGQAAAADAAAAAAAAAAAAAAABAAAAAAAAAfQAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAABAAAAAQAAAAAAAkZWR0cwAAABxlbHN0AAAAAAAAAAEAAAH0AAAAAAABAAAAAAGvbWRpYQAAACBtZGhkAAAAAAAAAAAAAAAAAABAAAAAIABVxAAAAAAALWhkbHIAAAAAAAAAAHZpZGUAAAAAAAAAAAAAAABWaWRlb0hhbmRsZXIAAAABWm1pbmYAAAAUdm1oZAAAAAEAAAAAAAAAAAAAACRkaW5mAAAAHGRyZWYAAAAAAAAAAQAAAAx1cmwgAAAAAQAAARpzdGJsAAAAtnN0c2QAAAAAAAAAAQAAAKZhdmMxAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAABAAEABIAAAASAAAAAAAAAABFUxhdmM2Mi4yOC4xMDAgbGlieDI2NAAAAAAAAAAAAAAAGP//AAAALGF2Y0MBQsAK/+EAFWdCwAraewEQAAADABAAAAMAQPEiagEABGjOD8gAAAAQcGFzcAAAAAEAAAABAAAAFGJ0cnQAAAAAAAAmUAAAAAAAAAAYc3R0cwAAAAAAAAABAAAAAQAAIAAAAAAcc3RzYwAAAAAAAAABAAAAAQAAAAEAAAABAAAAFHN0c3oAAAAAAAACZQAAAAEAAAAUc3RjbwAAAAAAAAABAAADPQAAAGJ1ZHRhAAAAWm1ldGEAAAAAAAAAIWhkbHIAAAAAAAAAAG1kaXJhcHBsAAAAAAAAAAAAAAAALWlsc3QAAAAlqXRvbwAAAB1kYXRhAAAAAQAAAABMYXZmNjIuMTIuMTAwAAAACGZyZWUAAAJtbWRhdAAAAlMGBf//T9xF6b3m2Ui3lizYINkj7u94MjY0IC0gY29yZSAxNjUgcjMyMjMgMDQ4MGNiMCAtIEguMjY0L01QRUctNCBBVkMgY29kZWMgLSBDb3B5bGVmdCAyMDAzLTIwMjUgLSBodHRwOi8vd3d3LnZpZGVvbGFuLm9yZy94MjY0Lmh0bWwgLSBvcHRpb25zOiBjYWJhYz0wIHJlZj0xIGRlYmxvY2s9MDowOjAgYW5hbHlzZT0wOjAgbWU9ZGlhIHN1Ym1lPTAgcHN5PTEgcHN5X3JkPTEuMDA6MC4wMiBtaXhlZF9yZWY9MCBtZV9yYW5nZT0xNiBjaHJvbWFfbWU9MSB0cmVsbGlzPTAgOHg4ZGN0PTAgY3FtPTAgZGVhZHpvbmU9MjEsMTEgZmFzdF9wc2tpcD0xIGNocm9tYV9xcF9vZmZzZXQ9MCB0aHJlYWRzPTEgbG9va2FoZWFkX3RocmVhZHM9MSBzbGljZWRfdGhyZWFkcz0wIG5yPTAgZGVjaW1hdGU9MSBpbnRlcmxhY2VkPTAgYmx1cmF5X2NvbXBhdD0wIGNvbnN0cmFpbmVkX2ludHJhPTAgYmZyYW1lcz0wIHdlaWdodHA9MCBrZXlpbnQ9MjUwIGtleWludF9taW49MiBzY2VuZWN1dD0wIGludHJhX3JlZnJlc2g9MCByYz1jcmYgbWJ0cmVlPTAgY3JmPTIzLjAgcWNvbXA9MC42MCBxcG1pbj0wIHFwbWF4PTY5IHFwc3RlcD00IGlwX3JhdGlvPTEuNDAgYXE9MACAAAAACmWIhDomKAAJAuA=';
 const state = {
   tabId: null,
   connected: false,
@@ -9,6 +12,8 @@ const state = {
   selectedTable: null,
   selectedRecord: null,
   recordData: null,
+  recordReadVersion: 0,
+  recordViewMode: 'source',
   originalText: '',
   filter: '',
   activity: []
@@ -53,10 +58,15 @@ function createDemoSnapshot() {
         { name: 'documents', recordCount: 4, size: 931240, records: [
           { name: 'field-notes.json', size: 842, type: 'application/json', lastModified: now - 480000 },
           { name: 'constellation-map.pdf', size: 928104, type: 'application/pdf', lastModified: now - 86400000 },
-          { name: 'readme.md', size: 2294, type: 'text/markdown', lastModified: now - 120000 }
+          { name: 'readme.md', size: 2294, type: 'text/markdown', lastModified: now - 120000 },
+          { name: 'worker.js', size: 194, type: 'text/javascript', lastModified: now - 90000 }
         ] },
         { name: 'users', recordCount: 2, size: 1280, records: [{ name: 'alex.json', size: 640, type: 'application/json', lastModified: now - 3600000 }] },
-        { name: 'images', recordCount: 3, size: 302140, records: [] },
+        { name: 'images', recordCount: 3, size: 302140, records: [
+          { name: 'pixel.png', size: 68, type: 'image/png', lastModified: now - 70000 },
+          { name: 'sample.mp3', size: 16, type: 'audio/mpeg', lastModified: now - 60000 },
+          { name: 'sample.mp4', size: 24, type: 'video/mp4', lastModified: now - 50000 }
+        ] },
         { name: 'memory', recordCount: 3, size: 4840, records: [] }
       ] },
       { id: 'dbopfs-playground', tableCount: 2, recordCount: 6, size: 558902, tables: [
@@ -73,12 +83,36 @@ class DemoClient {
     if (action === 'scan') return structuredClone(this.snapshot);
     if (action === 'readRecord') {
       const name = data.record || '';
+      if (name === 'constellation-map.pdf') {
+        await new Promise((resolve) => setTimeout(resolve, 80));
+      }
       if (name.endsWith('.pdf')) {
         const bytes = new TextEncoder().encode('%PDF-1.4\n% DBOPFS Studio demo PDF\n%%EOF\n');
         return { encoding: 'base64', base64: encodeBase64(bytes), type: 'application/pdf', size: bytes.length, lastModified: Date.now() };
       }
-      const text = name.endsWith('.json') ? JSON.stringify({ title: 'Field notes', status: 'durable', tags: ['opfs', 'dbopfs'], updated: new Date().toISOString() }, null, 2) : `# ${name}\n\nThis record is stored locally through DBOPFS.`;
-      return { encoding: 'text', text, type: name.endsWith('.json') ? 'application/json' : 'text/plain', size: text.length, lastModified: Date.now() };
+      if (name.endsWith('.png')) {
+        const base64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=';
+        return { encoding: 'base64', base64, type: 'image/png', size: decodeBase64(base64).length, lastModified: Date.now() };
+      }
+      if (name.endsWith('.mp3')) {
+        return { encoding: 'base64', base64: DEMO_MP3_BASE64, type: 'audio/mpeg', size: decodeBase64(DEMO_MP3_BASE64).length, lastModified: Date.now() };
+      }
+      if (name.endsWith('.mp4')) {
+        return { encoding: 'base64', base64: DEMO_MP4_BASE64, type: 'video/mp4', size: decodeBase64(DEMO_MP4_BASE64).length, lastModified: Date.now() };
+      }
+      let text;
+      let type = 'text/plain';
+      if (name.endsWith('.json')) {
+        text = JSON.stringify({ title: 'Field notes', status: 'durable', tags: ['opfs', 'dbopfs'], updated: new Date().toISOString() });
+        type = 'application/json';
+      } else if (name.endsWith('.js')) {
+        text = 'export function orbit(items){return items.map((item)=>({name:item.name,active:true}));}';
+        type = 'text/javascript';
+      } else {
+        text = `# ${name}\n\nThis record is stored locally through **DBOPFS**.\n\n- Inspect the source\n- Render the viewer`;
+        type = name.endsWith('.md') ? 'text/markdown' : 'text/plain';
+      }
+      return { encoding: 'text', text, type, size: text.length, lastModified: Date.now() };
     }
     if (action === 'writeRecord') return { ok: true };
     if (action === 'deleteRecord') return { ok: true };
@@ -183,7 +217,13 @@ function renderTree() {
 
 function currentApp() { return state.snapshot?.applications.find((app) => app.id === state.selectedApp); }
 function currentTable() { return currentApp()?.tables?.find((table) => table.name === state.selectedTable); }
-function isEditorDirty() { return Boolean(state.selectedRecord && !elements['record-editor'].hidden && elements['record-editor'].value !== state.originalText); }
+function isEditorDirty() {
+  return Boolean(
+    state.selectedRecord &&
+    state.recordData?.encoding === 'text' &&
+    elements['record-editor'].value !== state.originalText
+  );
+}
 function confirmDiscardChanges() { return !isEditorDirty() || window.confirm(`Discard unsaved changes to ${state.selectedRecord}?`); }
 
 function renderBreadcrumbs() {
@@ -227,6 +267,7 @@ function showView(view) {
 
 function selectApplication(appId) {
   if (!confirmDiscardChanges()) return;
+  if (state.selectedRecord) closeInspector(true);
   state.selectedApp = appId;
   state.selectedTable = currentApp()?.tables?.[0]?.name || null;
   state.selectedRecord = null;
@@ -239,6 +280,7 @@ function selectApplication(appId) {
 
 function selectTable(appId, tableName) {
   if (!confirmDiscardChanges()) return;
+  if (state.selectedRecord) closeInspector(true);
   state.selectedApp = appId;
   state.selectedTable = tableName;
   state.selectedRecord = null;
@@ -250,9 +292,20 @@ function selectTable(appId, tableName) {
 
 function recordDescriptor(name) { return currentTable()?.records?.find((record) => record.name === name) || { name }; }
 
-function makeBlobUrl(data, descriptor) {
+function releaseRecordObjectUrl(recordData = state.recordData) {
+  if (recordData?.objectUrl) {
+    URL.revokeObjectURL(recordData.objectUrl);
+    delete recordData.objectUrl;
+  }
+}
+
+function makeBlobUrl(data, descriptor, kind) {
   const bytes = data.base64 ? decodeBase64(data.base64) : new TextEncoder().encode(data.text || '');
-  return URL.createObjectURL(new Blob([bytes], { type: mimeForFile(descriptor.name, data.type || descriptor.type || '') }));
+  const type = nativeMimeForFile(kind, descriptor.name, data.type || descriptor.type || '');
+  return {
+    type,
+    url: URL.createObjectURL(new Blob([bytes], { type }))
+  };
 }
 
 function openNativeRecord() {
@@ -280,7 +333,8 @@ async function printRecord() {
     name: state.selectedRecord,
     path: `apps/${state.selectedApp}/${state.selectedTable}/${state.selectedRecord}`,
     kind,
-    type: mimeForFile(state.selectedRecord, state.recordData.type || state.recordData.descriptor?.type || ''),
+    type: nativeMimeForFile(kind, state.selectedRecord, state.recordData.type || state.recordData.descriptor?.type || ''),
+    viewKind: textViewKind(state.selectedRecord, state.recordData.type || state.recordData.descriptor?.type || ''),
     text: state.recordData.encoding === 'text' ? elements['record-editor'].value : undefined,
     base64: state.recordData.base64
   };
@@ -289,66 +343,184 @@ async function printRecord() {
   addActivity('Opened print view', payload.path);
 }
 
+function setRecordView(mode) {
+  if (state.recordData?.encoding !== 'text') return;
+  const nextMode = mode === 'viewer' ? 'viewer' : 'source';
+  state.recordViewMode = nextMode;
+  const showViewer = nextMode === 'viewer';
+  elements.preview.hidden = !showViewer;
+  elements['record-source'].hidden = showViewer;
+  elements['viewer-mode'].setAttribute('aria-selected', String(showViewer));
+  elements['viewer-mode'].tabIndex = showViewer ? 0 : -1;
+  elements['source-mode'].setAttribute('aria-selected', String(!showViewer));
+  elements['source-mode'].tabIndex = showViewer ? -1 : 0;
+  if (showViewer) {
+    renderTextPreview(elements.preview, {
+      name: state.selectedRecord,
+      mime: state.recordData.type || state.recordData.descriptor?.type || '',
+      text: elements['record-editor'].value
+    });
+  }
+}
+
+function renderTextRecord(data, descriptor) {
+  const text = data.text || '';
+  const viewKind = textViewKind(descriptor.name, data.type || descriptor.type || '');
+  state.recordData.viewKind = viewKind;
+  state.originalText = text;
+  state.recordViewMode = ['markdown', 'javascript', 'json'].includes(viewKind) ? 'viewer' : 'source';
+  elements['record-mode-bar'].hidden = false;
+  elements['viewer-mode'].textContent = ({
+    markdown: 'Rendered',
+    javascript: 'Beautified',
+    json: 'Formatted'
+  })[viewKind] || 'Viewer';
+  elements['record-editor'].value = text;
+  elements['record-editor'].disabled = false;
+  elements['save-record'].hidden = false;
+  elements['open-native'].hidden = true;
+  elements['editor-status'].classList.remove('is-dirty');
+  elements['editor-status'].textContent = ({
+    markdown: 'Markdown source editing · rendered view is read-only',
+    javascript: 'JavaScript source editing · beautified view is read-only',
+    json: 'JSON source editing · validation runs before save'
+  })[viewKind] || 'Text source editing';
+  setRecordView(state.recordViewMode);
+}
+
+function mediaElement(kind, url, name) {
+  if (kind === 'image') {
+    const image = document.createElement('img');
+    image.alt = `Preview of ${name}`;
+    image.className = 'media-preview';
+    image.decoding = 'async';
+    image.src = url;
+    return image;
+  }
+  if (kind === 'audio') {
+    const audio = document.createElement('audio');
+    audio.className = 'media-preview';
+    audio.controls = true;
+    audio.preload = 'metadata';
+    audio.src = url;
+    audio.setAttribute('aria-label', `Audio preview of ${name}`);
+    return audio;
+  }
+  if (kind === 'video') {
+    const video = document.createElement('video');
+    video.className = 'media-preview';
+    video.controls = true;
+    video.playsInline = true;
+    video.preload = 'metadata';
+    video.src = url;
+    video.setAttribute('aria-label', `Video preview of ${name}`);
+    return video;
+  }
+  return null;
+}
+
+function renderBinaryRecord(data, descriptor, kind) {
+  const blob = makeBlobUrl(data, descriptor, kind);
+  state.recordData.objectUrl = blob.url;
+  state.recordData.objectType = blob.type;
+  state.originalText = '';
+  elements['record-editor'].value = '';
+  elements['record-mode-bar'].hidden = true;
+  elements['record-source'].hidden = true;
+  elements.preview.hidden = false;
+  elements['save-record'].hidden = true;
+  const media = blob.type === 'application/octet-stream' ? null : mediaElement(kind, blob.url, descriptor.name);
+  if (media) {
+    elements.preview.append(media);
+  } else {
+    const card = document.createElement('div');
+    card.className = 'native-file-card';
+    const title = document.createElement('strong');
+    title.textContent = kind === 'pdf' ? 'PDF' : 'Binary file';
+    const detail = document.createElement('span');
+    detail.textContent = kind === 'pdf'
+      ? 'Opens in your Chromium browser’s native PDF viewer'
+      : 'Use your browser or operating system to open this file';
+    card.append(title, detail);
+    elements.preview.append(card);
+  }
+  elements['open-native'].hidden = false;
+  elements['open-native'].textContent = ({
+    pdf: 'Open native PDF viewer',
+    image: 'Open image in browser',
+    audio: 'Open audio in browser',
+    video: 'Open video in browser'
+  })[kind] || 'Open in browser';
+  elements['editor-status'].textContent = 'Binary contents are read-only in Studio';
+}
+
 function renderPreview(data, descriptor) {
   const kind = fileKind(descriptor.name, data.type || descriptor.type || '');
   elements.preview.replaceChildren();
+  elements.preview.className = 'preview record-viewer';
   elements['open-native'].hidden = true;
-  elements['record-editor'].hidden = false;
-  elements['record-editor'].disabled = false;
-  elements['save-record'].hidden = false;
 
-  if (data.encoding === 'text' || ['text', 'json'].includes(kind)) {
-    let text = data.text || '';
-    if (kind === 'json') { try { text = JSON.stringify(JSON.parse(text), null, 2); } catch {} }
-    elements['record-editor'].value = text;
-    elements['editor-status'].textContent = kind === 'json' ? 'JSON editing · validation runs before save' : 'Text editing';
-    state.originalText = text;
+  if (data.encoding === 'text') {
+    renderTextRecord(data, descriptor);
     return;
   }
 
-  const url = makeBlobUrl(data, descriptor);
-  state.recordData.objectUrl = url;
-  elements['record-editor'].hidden = true;
-  elements['save-record'].hidden = true;
-  if (kind === 'image') elements.preview.innerHTML = `<img src="${url}" alt="Preview of ${escapeHtml(descriptor.name)}">`;
-  else if (kind === 'audio') elements.preview.innerHTML = `<audio controls src="${url}"></audio>`;
-  else if (kind === 'video') elements.preview.innerHTML = `<video controls src="${url}"></video>`;
-  else elements.preview.innerHTML = `<div class="native-file-card"><strong>${kind === 'pdf' ? 'PDF' : 'Binary file'}</strong><span>${kind === 'pdf' ? 'Opens in your Chromium browser’s native PDF viewer' : 'Use your browser or operating system to open this file'}</span></div>`;
-  elements['open-native'].hidden = false;
-  elements['open-native'].textContent = kind === 'pdf' ? 'Open native PDF viewer' : 'Open in browser';
-  elements['editor-status'].textContent = 'Binary contents are read-only in Studio';
+  renderBinaryRecord(data, descriptor, kind);
 }
 
 async function openRecord(name) {
   if (!state.selectedApp || !state.selectedTable) return;
   if (name !== state.selectedRecord && !confirmDiscardChanges()) return;
+  const applicationId = state.selectedApp;
+  const tableName = state.selectedTable;
+  const readVersion = ++state.recordReadVersion;
   try {
+    releaseRecordObjectUrl();
     state.selectedRecord = name;
+    state.recordData = null;
+    state.originalText = '';
+    elements['inspector-empty'].hidden = false;
+    elements['inspector-content'].hidden = true;
+    elements.inspector.classList.add('is-open');
     renderRecords();
     const descriptor = recordDescriptor(name);
-    const data = await client.request('readRecord', { applicationId: state.selectedApp, table: state.selectedTable, record: name, maxBytes: 32 * 1024 * 1024 });
+    const data = await client.request('readRecord', { applicationId, table: tableName, record: name, maxBytes: 32 * 1024 * 1024 });
+    if (readVersion !== state.recordReadVersion || state.selectedApp !== applicationId ||
+        state.selectedTable !== tableName || state.selectedRecord !== name) return;
     state.recordData = { ...data, descriptor };
     elements['inspector-empty'].hidden = true;
     elements['inspector-content'].hidden = false;
     elements.inspector.classList.add('is-open');
     elements['inspector-name'].textContent = name;
-    elements['inspector-path'].textContent = `apps/${state.selectedApp}/${state.selectedTable}/${name}`;
+    elements['inspector-path'].textContent = `apps/${applicationId}/${tableName}/${name}`;
     elements['inspector-type'].textContent = data.type || descriptor.type || fileKind(name);
     elements['inspector-size'].textContent = formatBytes(data.size ?? descriptor.size);
     elements['inspector-modified'].textContent = formatDate(data.lastModified ?? descriptor.lastModified);
     renderPreview(data, descriptor);
-    addActivity('Opened record', `${state.selectedApp}/${state.selectedTable}/${name}`);
-  } catch (error) { toast(error.message, 'error'); }
+    addActivity('Opened record', `${applicationId}/${tableName}/${name}`);
+  } catch (error) {
+    if (readVersion !== state.recordReadVersion) return;
+    closeInspector(true);
+    toast(error.message, 'error');
+  }
 }
 
 async function refresh() {
   elements['refresh-button'].disabled = true;
   try {
     state.snapshot = await client.request('scan');
-    if (state.selectedApp && !state.snapshot.applications.some((app) => app.id === state.selectedApp)) {
+    const selectedApplication = state.snapshot.applications.find((app) => app.id === state.selectedApp);
+    const selectedTable = selectedApplication?.tables?.find((table) => table.name === state.selectedTable);
+    if (state.selectedApp && !selectedApplication) {
+      if (state.selectedRecord) closeInspector(true);
       state.selectedApp = null;
       state.selectedTable = null;
-      state.selectedRecord = null;
+    } else if (state.selectedTable && !selectedTable) {
+      if (state.selectedRecord) closeInspector(true);
+      state.selectedTable = selectedApplication?.tables?.[0]?.name || null;
+    } else if (state.selectedRecord &&
+        !selectedTable?.records?.some((record) => record.name === state.selectedRecord)) {
+      closeInspector(true);
     }
     elements['export-app-button'].disabled = !state.selectedApp;
     setConnected(true, state.snapshot.origin);
@@ -426,25 +598,35 @@ async function createRecord() {
 }
 
 async function saveRecord() {
-  if (!state.selectedRecord) return;
+  if (!state.selectedRecord || state.recordData?.encoding !== 'text') {
+    return toast('This record is read-only in Studio.', 'error');
+  }
+  const applicationId = state.selectedApp;
+  const tableName = state.selectedTable;
+  const recordName = state.selectedRecord;
+  const recordData = state.recordData;
   const text = elements['record-editor'].value;
-  if (fileKind(state.selectedRecord, state.recordData?.type || '') === 'json') {
+  if (fileKind(recordName, recordData.type || '') === 'json') {
     try { JSON.parse(text); } catch (error) { return toast(`JSON is not valid: ${error.message}`, 'error'); }
   }
   try {
     const result = await client.request('writeRecord', {
-      applicationId: state.selectedApp,
-      table: state.selectedTable,
-      record: state.selectedRecord,
+      applicationId,
+      table: tableName,
+      record: recordName,
       text,
-      expectedLastModified: state.recordData?.lastModified ?? state.recordData?.descriptor?.lastModified
+      expectedLastModified: recordData.lastModified ?? recordData.descriptor?.lastModified
     });
-    if (result?.metadata) state.recordData = { ...state.recordData, ...result.metadata };
-    state.originalText = text;
-    elements['editor-status'].textContent = 'Saved through DBOPFS';
-    elements['editor-status'].classList.remove('is-dirty');
-    addActivity('Saved record', `${state.selectedApp}/${state.selectedTable}/${state.selectedRecord}`);
-    toast('Changes saved through DBOPFS.');
+    if (state.selectedApp === applicationId && state.selectedTable === tableName &&
+        state.selectedRecord === recordName && state.recordData === recordData) {
+      if (result?.metadata) state.recordData = { ...recordData, ...result.metadata };
+      state.originalText = text;
+      const dirty = elements['record-editor'].value !== text;
+      elements['editor-status'].textContent = dirty ? 'Unsaved changes' : 'Saved through DBOPFS';
+      elements['editor-status'].classList.toggle('is-dirty', dirty);
+    }
+    addActivity('Saved record', `${applicationId}/${tableName}/${recordName}`);
+    toast(`${recordName} saved through DBOPFS.`);
     await refresh();
   } catch (error) { toast(error.message, 'error'); }
 }
@@ -458,7 +640,8 @@ async function deleteRecord() {
 
 function closeInspector(force = false) {
   if (!force && !confirmDiscardChanges()) return;
-  if (state.recordData?.objectUrl) URL.revokeObjectURL(state.recordData.objectUrl);
+  state.recordReadVersion += 1;
+  releaseRecordObjectUrl();
   state.selectedRecord = null; state.recordData = null; state.originalText = '';
   elements['inspector-empty'].hidden = false; elements['inspector-content'].hidden = true; elements.inspector.classList.remove('is-open');
   renderRecords();
@@ -488,6 +671,19 @@ function wireEvents() {
   elements['close-inspector'].addEventListener('click', () => closeInspector());
   elements['open-native'].addEventListener('click', openNativeRecord);
   elements['print-record'].addEventListener('click', printRecord);
+  elements['viewer-mode'].addEventListener('click', () => setRecordView('viewer'));
+  elements['source-mode'].addEventListener('click', () => setRecordView('source'));
+  elements['record-mode-bar'].addEventListener('keydown', (event) => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault();
+    const tabs = [elements['viewer-mode'], elements['source-mode']];
+    const current = tabs.indexOf(document.activeElement);
+    const next = event.key === 'Home' ? 0
+      : event.key === 'End' ? tabs.length - 1
+        : (current + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+    tabs[next].click();
+    tabs[next].focus();
+  });
   elements['record-editor'].addEventListener('input', () => { const dirty = elements['record-editor'].value !== state.originalText; elements['editor-status'].textContent = dirty ? 'Unsaved changes' : 'No unsaved changes'; elements['editor-status'].classList.toggle('is-dirty', dirty); });
   elements['global-search'].addEventListener('input', () => { state.filter = elements['global-search'].value.trim().toLowerCase(); if (state.selectedTable) renderRecords(); });
   elements['import-input'].addEventListener('change', () => importFiles(Array.from(elements['import-input'].files || [])));
@@ -496,13 +692,14 @@ function wireEvents() {
   elements['about-close'].addEventListener('click', () => elements['about-dialog'].close());
   elements['dialog-cancel'].addEventListener('click', () => elements['form-dialog'].close('cancel'));
   elements['dialog-form'].addEventListener('submit', (event) => { event.preventDefault(); if (!elements['dialog-input'].value.trim()) { elements['dialog-error'].textContent = 'Enter a value to continue.'; return; } elements['form-dialog'].close('confirm'); });
-  document.addEventListener('keydown', (event) => { if (event.key === '/' && !/INPUT|TEXTAREA/.test(document.activeElement?.tagName)) { event.preventDefault(); elements['global-search'].focus(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's' && state.selectedRecord) { event.preventDefault(); saveRecord(); } });
+  document.addEventListener('keydown', (event) => { if (event.key === '/' && !/INPUT|TEXTAREA/.test(document.activeElement?.tagName)) { event.preventDefault(); elements['global-search'].focus(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's' && state.recordData?.encoding === 'text') { event.preventDefault(); saveRecord(); } });
   window.addEventListener('beforeunload', (event) => {
     if (isEditorDirty()) {
       event.preventDefault();
       event.returnValue = '';
     }
   });
+  window.addEventListener('pagehide', () => releaseRecordObjectUrl());
 }
 
 async function initialize() {

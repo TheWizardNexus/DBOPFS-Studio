@@ -269,7 +269,28 @@ function assertPayloadSize(bytes){
 
 function isTextFile(file,fileName=''){
     return file.type.startsWith('text/')
-        ||/\.(?:c|cc|conf|cpp|css|csv|h|hpp|htm|html|ini|java|js|json|jsonl|log|md|mjs|ndjson|py|rb|rs|sh|svg|toml|txt|xml|yaml|yml)$/i.test(fileName);
+        ||/\.(?:c|cc|cjs|conf|cpp|css|csv|h|hpp|htm|html|ini|java|js|json|jsonl|log|markdown|md|mjs|ndjson|py|rb|rs|sh|svg|toml|txt|xml|yaml|yml)$/i.test(fileName);
+}
+
+function decodeUtf8Losslessly(bytes){
+    try{
+        const text=new TextDecoder('utf-8',{fatal:true,ignoreBOM:true}).decode(bytes);
+        const roundTrip=textEncoder.encode(text);
+
+        if(roundTrip.byteLength!==bytes.byteLength){
+            return null;
+        }
+
+        for(let index=0;index<bytes.byteLength;index+=1){
+            if(roundTrip[index]!==bytes[index]){
+                return null;
+            }
+        }
+
+        return text;
+    }catch{
+        return null;
+    }
 }
 
 async function filePayload(file,fileName,{maxBytes=DBOPFS_STUDIO_DEFAULT_MAX_BYTES}={}){
@@ -288,15 +309,20 @@ async function filePayload(file,fileName,{maxBytes=DBOPFS_STUDIO_DEFAULT_MAX_BYT
         size:file.size,
         lastModified:file.lastModified||null
     };
+    const bytes=new Uint8Array(await file.arrayBuffer());
 
     if(isTextFile(file,fileName)){
-        return {...common,encoding:'text',text:await file.text()};
+        const text=decodeUtf8Losslessly(bytes);
+
+        if(text!==null){
+            return {...common,encoding:'text',text};
+        }
     }
 
     return {
         ...common,
         encoding:'base64',
-        base64:bytesToBase64(new Uint8Array(await file.arrayBuffer()))
+        base64:bytesToBase64(bytes)
     };
 }
 
