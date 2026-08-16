@@ -4,8 +4,13 @@
 spot rendered from the shipped DBOPFS Studio demonstration interface and the
 tracked browser-store screenshots. `dbopfs-studio-promo-poster.png` is its
 matching 1920×1080 poster frame.
+`dbopfs-studio-youtube-thumbnail-1280x720.png` is the dedicated YouTube and
+README cover, `youtube-copy.md` contains copy-ready publishing metadata, and
+`dbopfs-studio-promo.en.vtt` contains timed English jingle captions.
 
-Regenerate both artifacts from the repository root:
+[Watch the published video on YouTube](https://youtu.be/y8FlLBzy-RU).
+
+Regenerate the video, poster, and YouTube thumbnail from the repository root:
 
 ```sh
 npm run promo:video

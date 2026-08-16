@@ -71,7 +71,29 @@ function setCurrentYear() {
     }
 }
 
+function installPromoPlayer() {
+    for (const player of document.querySelectorAll('[data-youtube-id]')) {
+        const button = player.querySelector('[data-youtube-play]');
+        const videoId = player.dataset.youtubeId;
+
+        if (!button || !/^[A-Za-z0-9_-]{11}$/.test(videoId)) {
+            continue;
+        }
+
+        button.addEventListener('click', () => {
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?autoplay=1&rel=0`;
+            iframe.title = 'DBOPFS Studio 0.1 product tour';
+            iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+            iframe.allowFullscreen = true;
+            player.replaceChildren(iframe);
+        }, { once: true });
+    }
+}
+
 setCurrentNavigation();
 installNavigation();
 installCopyButtons();
+installPromoPlayer();
 setCurrentYear();

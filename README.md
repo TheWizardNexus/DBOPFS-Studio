@@ -30,10 +30,15 @@ records receive first-class navigation and editing tools.
 
 ## Promo video
 
-[Watch or download the 1080p DBOPFS Studio promo](promo-video/dbopfs-studio-promo-1080p.mp4).
+[![Watch DBOPFS Studio 0.1 — Your DBOPFS Data, Made Legible](promo-video/dbopfs-studio-youtube-thumbnail-1280x720.png)](https://youtu.be/y8FlLBzy-RU)
+
+[Watch on YouTube](https://youtu.be/y8FlLBzy-RU) ·
+[Download the 1080p MP4](promo-video/dbopfs-studio-promo-1080p.mp4) ·
+[Copy the YouTube title, description, and tags](promo-video/youtube-copy.md)
+
 The rebuildable renderer uses the shipped demonstration interface and tracked
 store artwork, then adds clean cross-fades and the supplied retro jingle with
-FFmpeg. Run `npm run promo:video` to rebuild the video and poster.
+FFmpeg. Run `npm run promo:video` to rebuild the video, poster, and thumbnail.
 
 ## What it is built for
 

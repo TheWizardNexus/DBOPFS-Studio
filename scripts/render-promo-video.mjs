@@ -15,11 +15,14 @@ import { isMainModule, projectRoot, relativePath } from './project.mjs';
 
 const width = 1920;
 const height = 1080;
+const youtubeThumbnailWidth = 1280;
+const youtubeThumbnailHeight = 720;
 const fps = 30;
 const transitionDuration = 0.65;
 const outputRoot = path.join(projectRoot, 'promo-video');
 const videoPath = path.join(outputRoot, 'dbopfs-studio-promo-1080p.mp4');
 const posterPath = path.join(outputRoot, 'dbopfs-studio-promo-poster.png');
+const youtubeThumbnailPath = path.join(outputRoot, 'dbopfs-studio-youtube-thumbnail-1280x720.png');
 const jinglePath = path.join(outputRoot, 'source', 'dbopfs-studio-retro-jingle.wav');
 
 const sourcePaths = Object.freeze({
@@ -142,6 +145,57 @@ function sceneDocument(body) {
   </style></head><body>${body}</body></html>`;
 }
 
+function youtubeThumbnailDocument(markSvg, dashboardImage) {
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><style>
+    *{box-sizing:border-box}
+    html,body{width:${youtubeThumbnailWidth}px;height:${youtubeThumbnailHeight}px;margin:0;overflow:hidden}
+    body{font-family:"Segoe UI",Arial,sans-serif;background:#030811;color:#f4ecd7}
+    .thumbnail{position:relative;width:100%;height:100%;overflow:hidden;background:
+      radial-gradient(circle at 5% 5%,rgba(74,190,178,.24),transparent 36%),
+      radial-gradient(circle at 92% 96%,rgba(171,148,255,.18),transparent 42%),
+      linear-gradient(135deg,#030811 0%,#06101b 50%,#111526 100%)}
+    .thumbnail:before{content:"";position:absolute;inset:0;background-image:
+      linear-gradient(rgba(174,184,204,.05) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(174,184,204,.05) 1px,transparent 1px);
+      background-size:44px 44px;mask-image:linear-gradient(to bottom,black 0%,transparent 94%)}
+    .thumbnail:after{content:"";position:absolute;right:-186px;top:-210px;width:690px;height:470px;
+      border:2px solid rgba(74,190,178,.18);border-radius:50%;transform:rotate(-18deg)}
+    .orbit{position:absolute;left:-258px;bottom:-345px;width:820px;height:520px;border:2px solid rgba(76,51,88,.72);
+      border-radius:50%;transform:rotate(12deg)}
+    .orbit:before,.orbit:after{content:"";position:absolute;border-radius:50%}
+    .orbit:before{right:95px;top:73px;width:12px;height:12px;background:#d7a84d;box-shadow:0 0 26px rgba(215,168,77,.78)}
+    .orbit:after{left:86px;bottom:88px;width:10px;height:10px;background:#4abeb2;box-shadow:0 0 24px rgba(74,190,178,.7)}
+    .copy{position:absolute;z-index:3;left:64px;top:52px;width:590px}
+    .brand{display:flex;align-items:center;gap:17px}.brand-mark{width:66px;height:66px;flex:none}.brand-mark svg{display:block;width:100%;height:100%}
+    .brand-name{font:400 38px/1 Georgia,"Times New Roman",serif;letter-spacing:-.8px}.brand-studio{margin-top:6px;color:#d7a84d;font-size:12px;font-weight:700;letter-spacing:8px}
+    .kicker{margin:58px 0 16px;color:#d7a84d;font-size:15px;font-weight:800;letter-spacing:4px;text-transform:uppercase}
+    h1{margin:0;width:590px;font:400 67px/.98 Georgia,"Times New Roman",serif;letter-spacing:-2.4px;text-wrap:balance}
+    h1 span{display:block;color:#4abeb2}
+    .feature-line{display:inline-flex;align-items:center;gap:12px;margin-top:38px;padding:12px 17px;border:1px solid rgba(74,190,178,.42);
+      border-radius:999px;background:rgba(3,8,17,.7);color:#d9e3f2;font-size:12px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase}
+    .feature-line:before{content:"▶";color:#d7a84d;font-size:11px}
+    .product{position:absolute;z-index:2;left:612px;top:135px;width:620px}
+    .window{position:relative;padding:46px 10px 10px;border:1px solid rgba(174,184,204,.4);border-radius:18px;background:#151c2d;
+      box-shadow:0 34px 82px rgba(0,0,0,.6)}
+    .window-bar{position:absolute;left:0;right:0;top:0;height:46px;display:flex;align-items:center;gap:9px;padding:0 18px}
+    .dot{width:10px;height:10px;border-radius:50%}.red{background:#ef8383}.gold{background:#e6b75c}.green{background:#63c996}
+    .window-label{margin-left:10px;color:#8493aa;font-size:10px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase}
+    .window img{display:block;width:100%;height:auto;border-radius:9px}
+    .privacy-scrub{position:absolute;left:10px;bottom:10px;width:27%;height:52px;display:flex;align-items:center;justify-content:center;
+      border:1px solid rgba(74,190,178,.28);border-radius:0 6px 0 9px;background:#07111d;color:#b9c7da;font-size:8px;font-weight:800;letter-spacing:.9px}
+    .demo-note{margin:15px 0 0 18px;color:#728096;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
+    .compat{position:absolute;z-index:3;left:64px;bottom:52px;color:#8998ae;font-size:12px;font-weight:800;letter-spacing:2.2px;text-transform:uppercase}
+    .rule{position:absolute;z-index:1;left:64px;right:64px;bottom:89px;height:1px;background:linear-gradient(90deg,rgba(215,168,77,.5),rgba(74,190,178,.2),transparent)}
+  </style></head><body><main class="thumbnail"><div class="orbit"></div>
+    <section class="copy"><div class="brand"><div class="brand-mark">${markSvg}</div><div><div class="brand-name">DBOPFS</div><div class="brand-studio">STUDIO</div></div></div>
+      <p class="kicker">The 29-second product tour</p><h1>Your DBOPFS data,<span>made legible.</span></h1>
+      <div class="feature-line">Inspect · edit · preview · export</div></section>
+    <section class="product"><div class="window"><div class="window-bar"><span class="dot red"></span><span class="dot gold"></span><span class="dot green"></span><span class="window-label">Shipped DBOPFS Studio interface</span></div>
+      <img src="${dashboardImage}" alt=""><span class="privacy-scrub">LOCAL BY DESIGN</span></div><p class="demo-note">Fictional demo data · actual product UI</p></section>
+    <div class="rule"></div><div class="compat">Local-first · Chrome · Microsoft Edge · compatible Chromium</div>
+  </main></body></html>`;
+}
+
 function createScenes(markSvg, images) {
   const shell = (className, inner, number) => `<main class="stage ${className}"><div class="orbital"></div>` +
     `<div class="content">${inner}</div><div class="scene-number">${String(number).padStart(2, '0')} / 07</div></main>`;
@@ -229,6 +283,10 @@ async function renderSceneFrames(directory) {
       await page.screenshot({ path: scenePath, type: 'png', captureBeyondViewport: false });
       paths.push(scenePath);
     }
+    await page.setViewport({ width: youtubeThumbnailWidth, height: youtubeThumbnailHeight, deviceScaleFactor: 1 });
+    await page.setContent(youtubeThumbnailDocument(markSvg, images.dashboard), { waitUntil: 'load' });
+    await settle(page);
+    await page.screenshot({ path: youtubeThumbnailPath, type: 'png', captureBeyondViewport: false });
     await page.close();
     return paths;
   } finally {
@@ -383,7 +441,9 @@ export async function renderPromoVideo() {
       duration: Number(probe.format.duration),
       filePath: videoPath,
       posterPath,
+      youtubeThumbnailPath,
       sha256: await sha256(videoPath),
+      youtubeThumbnailSha256: await sha256(youtubeThumbnailPath),
       size: details.size
     };
   } finally {
@@ -396,7 +456,9 @@ if (isMainModule(import.meta.url)) {
     .then((result) => {
       console.log(`Rendered ${relativePath(result.filePath)} (${result.duration.toFixed(2)}s, ${(result.size / 1024 / 1024).toFixed(2)} MiB).`);
       console.log(`Poster: ${relativePath(result.posterPath)}`);
+      console.log(`YouTube thumbnail: ${relativePath(result.youtubeThumbnailPath)}`);
       console.log(`SHA-256: ${result.sha256}`);
+      console.log(`Thumbnail SHA-256: ${result.youtubeThumbnailSha256}`);
     })
     .catch((error) => {
       console.error(error.stack || error.message);
