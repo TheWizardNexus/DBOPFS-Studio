@@ -28,6 +28,14 @@ records receive first-class navigation and editing tools.
 [Review the architecture](https://thewizardnexus.github.io/DBOPFS-Studio/architecture.html) ·
 [Read the privacy policy](https://thewizardnexus.github.io/DBOPFS-Studio/privacy.html)
 
+## Promo video
+
+[Watch or download the 1080p DBOPFS Studio promo](promo-video/dbopfs-studio-promo-1080p.mp4).
+The rebuildable renderer uses the shipped demonstration interface and tracked
+store artwork, then adds motion, a restrained VHS-era finish, and the supplied
+retro jingle with FFmpeg. Run `npm run promo:video` to rebuild the video and
+poster.
+
 ## What it is built for
 
 - Inspect DBOPFS applications, tables, and records as database concepts instead

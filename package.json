@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "icons": "node scripts/render-icons.mjs",
+    "promo:video": "node scripts/render-promo-video.mjs",
     "store:assets": "node scripts/render-store-assets.mjs",
     "store:assets:check": "node scripts/validate-store-assets.mjs",
     "start": "node scripts/serve.mjs",
