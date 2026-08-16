@@ -32,9 +32,8 @@ records receive first-class navigation and editing tools.
 
 [Watch or download the 1080p DBOPFS Studio promo](promo-video/dbopfs-studio-promo-1080p.mp4).
 The rebuildable renderer uses the shipped demonstration interface and tracked
-store artwork, then adds motion, a restrained VHS-era finish, and the supplied
-retro jingle with FFmpeg. Run `npm run promo:video` to rebuild the video and
-poster.
+store artwork, then adds clean cross-fades and the supplied retro jingle with
+FFmpeg. Run `npm run promo:video` to rebuild the video and poster.
 
 ## What it is built for
 

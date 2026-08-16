@@ -264,10 +264,8 @@ async function run(command, arguments_, options = {}) {
 
 function buildVideoFilter() {
   const filters = scenePlan.map((scene, index) => {
-    const frames = Math.ceil(scene.duration * fps);
-    return `[${index}:v]zoompan=z='min(zoom+0.00008,1.012)':` +
-      `x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=${frames}:s=${width}x${height}:fps=${fps},` +
-      `trim=duration=${scene.duration},setpts=PTS-STARTPTS[v${index}]`;
+    return `[${index}:v]tpad=stop_mode=clone:stop_duration=${scene.duration},` +
+      `fps=${fps},trim=duration=${scene.duration},setpts=PTS-STARTPTS[v${index}]`;
   });
 
   let elapsed = scenePlan[0].duration;
@@ -280,17 +278,7 @@ function buildVideoFilter() {
     previous = output;
     elapsed += scenePlan[index].duration - transitionDuration;
   }
-  filters.push(
-    '[video]eq=contrast=1.025:brightness=-0.005:saturation=0.94,' +
-    'chromashift=cbh=1:crh=-1:edge=smear,' +
-    'noise=alls=2:allf=t+u:all_seed=4242,' +
-    'drawgrid=w=iw:h=4:t=1:c=black@0.07,' +
-    `drawbox=x=0:y=h-62:w=iw:h=2:c=white@0.08:t=fill:enable='lt(mod(t\\,7.1)\\,0.10)',` +
-    `drawbox=x=0:y=64:w=iw:h=10:c=black@0.06:t=fill:enable='between(mod(t\\,11.3)\\,0.08\\,0.20)',` +
-    `drawtext=font='Consolas':text='CH 3':fontsize=44:fontcolor=white@0.74:` +
-    `borderw=2:bordercolor=black@0.58:shadowx=2:shadowy=2:shadowcolor=black@0.65:` +
-    'x=w-tw-62:y=50:alpha=0.72,format=yuv420p[final]'
-  );
+  filters.push('[video]format=yuv420p[final]');
   filters.push(
     `[${scenePlan.length}:a]aresample=48000,` +
     'aecho=0.96:0.94:900|1800|2700|4200:0.15|0.12|0.09|0.07,' +
@@ -311,11 +299,15 @@ async function encodeVideo(scenePaths) {
     '-t', totalDuration().toFixed(3),
     '-r', String(fps),
     '-c:v', 'libx264',
-    '-preset', 'medium',
-    '-crf', '18',
+    '-preset', 'slow',
+    '-tune', 'stillimage',
+    '-crf', '16',
     '-profile:v', 'high',
     '-level', '4.2',
     '-pix_fmt', 'yuv420p',
+    '-color_primaries', 'bt709',
+    '-color_trc', 'bt709',
+    '-colorspace', 'bt709',
     '-c:a', 'aac',
     '-b:a', '192k',
     '-ar', '48000',

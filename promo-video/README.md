@@ -13,8 +13,8 @@ npm run promo:video
 
 The renderer requires a local Chromium browser, `ffmpeg`, and `ffprobe`. It
 uses the repository's existing `puppeteer-core` dependency and adds no new npm
-dependency. It applies restrained scanlines, analog grain, brief tracking
-bands, and a `CH 3` display after compositing the scene transitions.
+dependency. It holds each rendered 1920×1080 scene plate completely still and
+connects scenes with short cross-fades.
 
 The soundtrack source is
 `source/dbopfs-studio-retro-jingle.wav`, supplied by the repository owner. Its
