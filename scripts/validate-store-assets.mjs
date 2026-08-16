@@ -15,9 +15,8 @@ const manifestPath = path.join(storeRoot, 'asset-manifest.json');
 
 export const STORE_SOURCE_REFERENCES = Object.freeze([
   'scripts/render-store-assets.mjs',
+  'assets/opera-store-icon-64x64.png',
   'extension/assets/icons/mark.svg',
-  'extension/assets/icons/icon-16.png',
-  'extension/assets/icons/icon-48.png',
   'extension/assets/icons/icon-128.png',
   'extension/popup/index.html',
   'extension/popup/popup.css',
@@ -53,24 +52,22 @@ export const STORE_ASSET_SPECS = Object.freeze({
   'edge/screenshots/03-json-inspector-1280x800.png': [1280, 800],
   'edge/screenshots/04-markdown-preview-1280x800.png': [1280, 800],
   'edge/screenshots/05-pdf-workflow-1280x800.png': [1280, 800],
-  'opera/icons/icon-16x16.png': [16, 16],
-  'opera/icons/icon-48x48.png': [48, 48],
-  'opera/icons/icon-128x128.png': [128, 128],
+  'opera/icons/icon-64x64.png': [64, 64],
+  'opera/promo/promotional-image-300x188.png': [300, 188],
   'opera/screenshots/01-dashboard-612x408.png': [612, 408],
   'opera/screenshots/02-json-inspector-612x408.png': [612, 408]
 });
 
 const matchingPairs = Object.freeze([
   ['chrome/icon/store-icon-128x128.png', '../extension/assets/icons/icon-128.png'],
+  ['opera/icons/icon-64x64.png', '../assets/opera-store-icon-64x64.png'],
   ['edge/promo/small-promo-440x280.png', 'chrome/promo/small-promo-440x280.png'],
   ['edge/promo/large-promo-1400x560.png', 'chrome/promo/marquee-promo-1400x560.png'],
   ['edge/screenshots/01-dashboard-1280x800.png', 'chrome/screenshots/01-dashboard-1280x800.png'],
   ['edge/screenshots/02-connect-to-site-1280x800.png', 'chrome/screenshots/02-connect-to-site-1280x800.png'],
   ['edge/screenshots/03-json-inspector-1280x800.png', 'chrome/screenshots/03-json-inspector-1280x800.png'],
   ['edge/screenshots/04-markdown-preview-1280x800.png', 'chrome/screenshots/04-markdown-preview-1280x800.png'],
-  ['edge/screenshots/05-pdf-workflow-1280x800.png', 'chrome/screenshots/05-pdf-workflow-1280x800.png'],
-  ['opera/icons/icon-16x16.png', '../extension/assets/icons/icon-16.png'],
-  ['opera/icons/icon-48x48.png', '../extension/assets/icons/icon-48.png']
+  ['edge/screenshots/05-pdf-workflow-1280x800.png', 'chrome/screenshots/05-pdf-workflow-1280x800.png']
 ]);
 
 function inspectPng(bytes) {
@@ -166,7 +163,7 @@ async function decodePngs(files, issues) {
       base64: bytes.toString('base64'),
       inspectAlpha: [
         'chrome/icon/store-icon-128x128.png',
-        'opera/icons/icon-128x128.png'
+        'opera/icons/icon-64x64.png'
       ].includes(reference),
       reference
     })));
@@ -187,11 +184,11 @@ async function decodePngs(files, issues) {
           'expected exact 16px padding around 96px artwork.'
         );
       }
-      if (result.reference === 'opera/icons/icon-128x128.png' &&
-          JSON.stringify(result.alphaBounds) !== JSON.stringify([8, 8, 119, 119])) {
+      if (result.reference === 'opera/icons/icon-64x64.png' &&
+          JSON.stringify(result.alphaBounds) !== JSON.stringify([4, 4, 59, 59])) {
         issues.push(
           `${result.reference} has alpha bounds ${result.alphaBounds?.join(',')}; ` +
-          'expected 112px artwork for Opera field occupancy.'
+          'expected 56px artwork with 4px transparent padding.'
         );
       }
     }

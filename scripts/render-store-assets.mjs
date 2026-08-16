@@ -113,19 +113,41 @@ async function renderEdgeLogo(page, markSvg) {
   );
 }
 
-async function renderOperaIcon(page, markSvg) {
+async function renderOperaPromo(page, markSvg) {
   const css = `
     *{box-sizing:border-box}
-    html,body{width:128px;height:128px;margin:0;overflow:hidden;background:transparent}
-    body{display:grid;place-items:center}
-    .mark{width:112px;height:112px}.mark svg{display:block;width:100%;height:100%}
+    html,body{width:300px;height:188px;margin:0;overflow:hidden}
+    body{position:relative;display:grid;place-items:center;background:
+      radial-gradient(circle at 16% 8%,rgba(74,190,178,.23),transparent 42%),
+      radial-gradient(circle at 90% 92%,rgba(171,148,255,.19),transparent 44%),
+      linear-gradient(135deg,#030811 0%,#07111e 56%,#111526 100%);color:#f4ecd7}
+    body:before{content:"";position:absolute;inset:0;background-image:
+      linear-gradient(rgba(174,184,204,.045) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(174,184,204,.045) 1px,transparent 1px);
+      background-size:24px 24px;mask-image:linear-gradient(to bottom,black,transparent)}
+    .orbit{position:absolute;width:260px;height:104px;border:1px solid rgba(74,190,178,.4);
+      border-radius:50%;transform:rotate(-15deg)}
+    .orbit:after{content:"";position:absolute;right:18px;top:12px;width:7px;height:7px;
+      border-radius:50%;background:#d7a84d;box-shadow:0 0 14px rgba(215,168,77,.8)}
+    .brand{position:relative;z-index:1;display:flex;align-items:center;gap:17px;padding:20px 22px;
+      border:1px solid rgba(215,168,77,.22);border-radius:19px;background:rgba(3,8,17,.68);
+      box-shadow:0 18px 40px rgba(0,0,0,.36)}
+    .mark{width:70px;height:70px;flex:none}.mark svg{display:block;width:100%;height:100%}
+    h1{margin:0;font:400 31px/1 Georgia,"Times New Roman",serif;letter-spacing:-.5px}
+    .studio{margin:7px 0 0;color:#d7a84d;font:700 11px/1 "Segoe UI",Arial,sans-serif;
+      letter-spacing:6px}
+    .purpose{margin:12px 0 0;color:#aeb8cc;font:600 10px/1.2 "Segoe UI",Arial,sans-serif;
+      letter-spacing:1px;text-transform:uppercase}
   `;
+  const body = `<div class="orbit" aria-hidden="true"></div><section class="brand">` +
+    `<div class="mark">${markSvg}</div><div><h1>DBOPFS</h1><p class="studio">STUDIO</p>` +
+    `<p class="purpose">OPFS data workspace</p></div></section>`;
   await setCanvas(
     page,
-    128,
-    128,
-    baseDocument(`<div class="mark">${markSvg}</div>`, css),
-    { path: outputPath('opera', 'icons', 'icon-128x128.png'), omitBackground: true }
+    300,
+    188,
+    baseDocument(body, css),
+    { path: outputPath('opera', 'promo', 'promotional-image-300x188.png') }
   );
 }
 
@@ -411,12 +433,10 @@ async function copyStoreIcons() {
     path.join(extensionRoot, 'assets', 'icons', 'icon-128.png'),
     outputPath('chrome', 'icon', 'store-icon-128x128.png')
   );
-  for (const size of [16, 48]) {
-    await copyAsset(
-      path.join(extensionRoot, 'assets', 'icons', `icon-${size}.png`),
-      outputPath('opera', 'icons', `icon-${size}x${size}.png`)
-    );
-  }
+  await copyAsset(
+    path.join(projectRoot, 'assets', 'opera-store-icon-64x64.png'),
+    outputPath('opera', 'icons', 'icon-64x64.png')
+  );
 }
 
 export async function renderStoreAssets() {
@@ -441,9 +461,9 @@ export async function renderStoreAssets() {
       );
       const dashboardPath = outputPath('chrome', 'screenshots', screenshotNames[0]);
       await renderEdgeLogo(canvas, markSvg);
-      await renderOperaIcon(canvas, markSvg);
       await renderConnectionScreenshot(canvas, markSvg, connectionSurfaces);
       await renderSmallPromo(canvas, markSvg);
+      await renderOperaPromo(canvas, markSvg);
       await renderLargePromo(canvas, markSvg, await asDataUrl(dashboardPath));
       await renderOperaScreenshot(
         canvas,

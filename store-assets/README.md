@@ -46,20 +46,24 @@ guide](https://learn.microsoft.com/en-us/microsoft-edge/extensions/publish/publi
 
 | Store field | Requirement | File |
 | --- | --- | --- |
-| Package icons | 128×128 always; 48×48 recommended; 16×16 optional | The three files in `opera/icons/`; use them in the Opera-specific package manifest |
+| Listing icon | Required by the current live form, 64×64 | `opera/icons/icon-64x64.png` |
+| Promotional Image | Optional; exactly 300×188 for potential Recommended featuring | `opera/promo/promotional-image-300x188.png` |
 | Screenshots | Required; 612×408 preferred, 800×600 maximum | Both files in `opera/screenshots/` |
 
-The Opera 128px icon intentionally uses 112px artwork to satisfy Opera's
-roughly 85% field-occupancy guidance. It therefore differs from Chrome's
-required 96px padded icon and is the source to use in an Opera-specific
-submission package.
+The publisher-approved Opera 64px icon is preserved byte-for-byte from
+`assets/opera-store-icon-64x64.png`; it uses 56px artwork with 4px transparent
+padding on every side. The live developer dashboard's Promotional Image field
+accepts one optional 300×188 image and recommends including the extension name,
+logo, and a short purpose phrase. The field is used only if Opera chooses the
+extension for Recommended featuring. See Opera's official [Promotional Image
+field template](https://addons-static.operacdn.com/static/developer/app/components/package/views/promotion.html).
 
 Opera recommends one screenshot showing how the extension works and another
 showing how it looks. These non-interlaced PNGs use Opera's preferred white
-surround. Opera publishes no promotional-tile requirement. Official
+surround. The public guide provides the screenshot guidance, while the live
+form template supplies the current Promotional Image dimensions. Official
 requirements: [Opera publishing
 guidelines](https://help.opera.com/en/extensions/publishing-guidelines/),
-[manifest icon guidance](https://help.opera.com/en/extensions/manifest/), and
 [acceptance criteria](https://help.opera.com/en/extensions/acceptance-criteria/).
 
 The public guidance also recommends showing the extension in Opera's default

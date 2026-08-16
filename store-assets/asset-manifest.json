@@ -1,10 +1,9 @@
 {
   "schemaVersion": 1,
   "sources": {
-    "scripts/render-store-assets.mjs": "aae10a252751710d5e781cf546dd9af58d662ee6f8fab137649f78822c27e2a5",
+    "scripts/render-store-assets.mjs": "89203c4e78ab82b7993a14ab4c5c3733e22a3cd6c278ab0b51eeda6e72a7c30f",
+    "assets/opera-store-icon-64x64.png": "e028eccf4f0c925c3a80c37a75e74f4912fe4af7f7b9ab11e0cf99cca3b972c4",
     "extension/assets/icons/mark.svg": "ecaf8b0f4f345ffb41db1f584cfe15c3a5d3446feb2f8a3abf679f20c6879922",
-    "extension/assets/icons/icon-16.png": "fba0a6b7f12fee5ba6a3a981bd7fea7a5f793ecd966f0883f433456a9a32a477",
-    "extension/assets/icons/icon-48.png": "cc414ea4473f8d09b74aff9a0065b6fa7c6aaccb8d2d5c36fc62012a91579bc7",
     "extension/assets/icons/icon-128.png": "efa0fcafda1a9984b50fae9f5908bd3581ca5a2e37579878ca1f2015e85c54be",
     "extension/popup/index.html": "082cd89dd71c7fd80481d2286e8edc7330fe0bb1ce30452bb1232a193e1f24e8",
     "extension/popup/popup.css": "4153bddc490d5e46b96cc2ece2275e91e026f17030474c7a4bd23e2c852fd902",
@@ -39,9 +38,8 @@
     "edge/screenshots/03-json-inspector-1280x800.png": "b3c79acd82cb2f28f801b70096cb9ac816114de888491ff52c858879dcde50ca",
     "edge/screenshots/04-markdown-preview-1280x800.png": "2ec5b414e49428fb6e9599445858ff18bd5b9a2440604b216de3617ab9bf6ddd",
     "edge/screenshots/05-pdf-workflow-1280x800.png": "9c9669507a851d0851da322f008047c8daa83e2d4f32766f0036b1d76a431f67",
-    "opera/icons/icon-16x16.png": "fba0a6b7f12fee5ba6a3a981bd7fea7a5f793ecd966f0883f433456a9a32a477",
-    "opera/icons/icon-48x48.png": "cc414ea4473f8d09b74aff9a0065b6fa7c6aaccb8d2d5c36fc62012a91579bc7",
-    "opera/icons/icon-128x128.png": "e02deabba0ea353f95920c8202e851ba3196b703db3e4fe56ec6b8502aaf50f0",
+    "opera/icons/icon-64x64.png": "e028eccf4f0c925c3a80c37a75e74f4912fe4af7f7b9ab11e0cf99cca3b972c4",
+    "opera/promo/promotional-image-300x188.png": "eef88b9d4c1460b7819fc84251b7288903cbab0110b09c6195dd1fb5f24bb7ba",
     "opera/screenshots/01-dashboard-612x408.png": "7aa2943e8c2510ea7496b487c070e38e699451a6ad77da239e4d9a37d8166ac4",
     "opera/screenshots/02-json-inspector-612x408.png": "dfba667a2b1eefdbfd212e9d1732a94b2134d837064f986782735ced8dc922bc"
   }
