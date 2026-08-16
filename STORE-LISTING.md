@@ -65,11 +65,23 @@ unavailable.
 - Source: <https://github.com/TheWizardNexus/DBOPFS-Studio>
 - Security policy: <https://github.com/TheWizardNexus/DBOPFS-Studio/blob/main/SECURITY.md>
 
+## Listing images
+
+Upload-ready Chrome Web Store, Microsoft Edge Add-ons, and Opera Add-ons image
+sets are tracked in [`store-assets/`](store-assets/README.md). The renderer uses
+the shipped Studio interface with fictional demonstration records and produces
+all required pixel dimensions plus the optional Chrome/Edge feature tile.
+
+Brave and Vivaldi do not require separate listing artwork because both install
+extensions from the Chrome Web Store. They remain compatibility-test targets.
+
 ## Pre-submission gate
 
+- Regenerate and validate the listing images with `npm run store:assets`.
+- Run `npm run release:test` after the visible interface and artwork are final.
 - Test the exact ZIP on the owner's machine in Chrome with **Load unpacked**.
 - Repeat the core open/edit/save/PDF/print path in Microsoft Edge.
 - Confirm the package SHA-256 matches the release-test output.
 - Review the store data-safety answers against `PRIVACY.md` and the manifest.
-- Capture final listing screenshots from that exact build.
+- Compare the listing images with that exact build.
 - Submit only after the repository owner explicitly approves publication.

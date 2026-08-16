@@ -99,6 +99,7 @@ features can change what is available.
 DBOPFS-Studio/
 ├── extension/   Chromium extension source and bundled runtime
 ├── docs/        Dependency-free GitHub Pages site
+├── store-assets/ Upload-ready Chrome, Edge, and Opera listing images
 ├── tests/       Browser test suite
 └── scripts/     Test, coverage, and release utilities
 ```
@@ -115,12 +116,18 @@ by `npm run`:
 npm ci
 npm test
 npm run coverage
+npm run store:assets:check
 ```
 
 Browser tests use `vanilla-test` against Google Chrome and real OPFS. Coverage
 is collected with Chrome precise coverage through the browser automation path.
 Coverage numbers are evidence for the files exercised by that run, not a
 guarantee that every Chromium variant behaves identically.
+
+Store artwork is generated from the real demonstration interface and tracked
+brand sources without modifying the extension package. Run
+`npm run store:assets` to regenerate every required size, then follow the
+upload map in [store-assets/README.md](store-assets/README.md).
 
 ## Privacy and security
 

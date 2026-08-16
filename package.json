@@ -6,6 +6,8 @@
   "type": "module",
   "scripts": {
     "icons": "node scripts/render-icons.mjs",
+    "store:assets": "node scripts/render-store-assets.mjs",
+    "store:assets:check": "node scripts/validate-store-assets.mjs",
     "start": "node scripts/serve.mjs",
     "test": "node scripts/test-all.mjs",
     "test:browser": "node scripts/test-browser.mjs",

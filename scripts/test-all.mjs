@@ -2,10 +2,13 @@ import { isMainModule } from './project.mjs';
 import { runBrowserTests } from './test-browser.mjs';
 import { testInstalledExtension } from './test-extension.mjs';
 import { validateManifest } from './validate-manifest.mjs';
+import { validateStoreAssets } from './validate-store-assets.mjs';
 
 export async function runAllTests() {
   const validation = await validateManifest();
   console.log(`Manifest ${validation.manifest.version} is valid.`);
+  const storeAssets = await validateStoreAssets();
+  console.log(`Store assets are valid (${storeAssets.files} PNG files).`);
   await runBrowserTests();
   return testInstalledExtension();
 }

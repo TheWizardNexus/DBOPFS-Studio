@@ -12,6 +12,7 @@ import {
 } from './project.mjs';
 import { packageExtension } from './package-extension.mjs';
 import { validateManifest } from './validate-manifest.mjs';
+import { validateStoreAssets } from './validate-store-assets.mjs';
 
 const PACKAGED_LEGAL_FILES = Object.freeze([
   'LICENSE',
@@ -229,6 +230,7 @@ async function findForbiddenSources(issues) {
 export async function validateRelease(options = {}) {
   const issues = [];
   let manifestValidation;
+  let storeAssetValidation;
   try {
     manifestValidation = await validateManifest();
   } catch (error) {
@@ -247,6 +249,11 @@ export async function validateRelease(options = {}) {
     }
   }
   await findForbiddenSources(issues);
+  try {
+    storeAssetValidation = await validateStoreAssets();
+  } catch (error) {
+    issues.push(error.message);
+  }
 
   if (issues.length) {
     throw new Error(`Release validation failed:\n- ${issues.join('\n- ')}`);
@@ -255,7 +262,8 @@ export async function validateRelease(options = {}) {
   const result = {
     extensionFiles: manifestValidation.files.length,
     manifest: manifestValidation.manifest,
-    pagesFiles: pagesFiles.length
+    pagesFiles: pagesFiles.length,
+    storeAssets: storeAssetValidation.files
   };
   if (options.package) {
     result.package = await packageExtension();
@@ -268,7 +276,8 @@ if (isMainModule(import.meta.url)) {
     .then((result) => {
       console.log(
         `Release ${result.manifest.version} is valid ` +
-        `(${result.extensionFiles} extension files, ${result.pagesFiles} Pages files).`
+        `(${result.extensionFiles} extension files, ${result.pagesFiles} Pages files, ` +
+        `${result.storeAssets} store images).`
       );
       if (result.package) {
         console.log(`Verified package: ${relativePath(result.package.outputPath)}`);
