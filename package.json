@@ -24,6 +24,6 @@
   "devDependencies": {
     "fflate": "0.8.2",
     "puppeteer-core": "25.7.0",
-    "vanilla-test": "1.4.9"
+    "vanilla-test": "2.1.0"
   }
 }

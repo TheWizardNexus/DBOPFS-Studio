@@ -131,8 +131,9 @@ npm run coverage
 npm run store:assets:check
 ```
 
-Browser tests use `vanilla-test` against Google Chrome and real OPFS. Coverage
-is collected with Chrome precise coverage through the browser automation path.
+Browser tests use the exactly pinned `vanilla-test@2.1.0` against Google Chrome
+and real OPFS. Coverage is collected with Chrome precise coverage through the
+browser automation path.
 Coverage numbers are evidence for the files exercised by that run, not a
 guarantee that every Chromium variant behaves identically.
 

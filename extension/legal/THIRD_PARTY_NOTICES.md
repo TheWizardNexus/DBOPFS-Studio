@@ -8,7 +8,7 @@ retained with the bundled dependency.
 Development and release testing use, but the published extension does not
 bundle:
 
-- [`vanilla-test@1.4.9`](https://www.npmjs.com/package/vanilla-test), MIT License.
+- [`vanilla-test@2.1.0`](https://www.npmjs.com/package/vanilla-test), MIT License.
 - [`puppeteer-core@25.7.0`](https://www.npmjs.com/package/puppeteer-core),
   Apache-2.0 License.
 - [`fflate@0.8.2`](https://www.npmjs.com/package/fflate), MIT License.

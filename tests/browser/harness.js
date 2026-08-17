@@ -1,4 +1,4 @@
-import VanillaTest from '/node_modules/vanilla-test/index.js';
+import VanillaTest from 'vanilla-test';
 
 export const SUITE_NAMES = Object.freeze([
   'Unit',
@@ -6,6 +6,12 @@ export const SUITE_NAMES = Object.freeze([
   'Integration',
   'Regression'
 ]);
+
+const REQUIRED_VANILLA_TEST_VERSION = '2.1.0';
+const vanillaTestMetadata = await (await fetchOk(
+  '/node_modules/vanilla-test/package.json'
+)).json();
+export const VANILLA_TEST_VERSION = vanillaTestMetadata.version;
 
 export function assert(condition, message = 'Assertion failed.') {
   if (!condition) {
@@ -44,6 +50,10 @@ function summarize(details) {
 }
 
 export function createHarness() {
+  assert(
+    VANILLA_TEST_VERSION === REQUIRED_VANILLA_TEST_VERSION,
+    `Browser tests require vanilla-test ${REQUIRED_VANILLA_TEST_VERSION}.`
+  );
   const framework = new VanillaTest();
   const details = [];
 
@@ -105,15 +115,20 @@ export function createHarness() {
       }
     }
 
-    const report = framework.report(false);
+    const report = framework.report();
     const suiteResults = summarize(details);
     return {
       complete: true,
       details,
-      failed: report.failed.length,
-      passed: report.passed.length,
+      failed: report.failureCount,
+      framework: {
+        name: 'vanilla-test',
+        results: report,
+        version: VANILLA_TEST_VERSION
+      },
+      passed: report.total - report.failureCount,
       suites: suiteResults,
-      total: report.passed.length + report.failed.length
+      total: report.total
     };
   }
 

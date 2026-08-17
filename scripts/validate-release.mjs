@@ -26,6 +26,7 @@ const REQUIRED_NOTICE_LINES = Object.freeze([
   'Required Notice: Copyright 2026 The Wizard Nexus.',
   'Required Notice: Commercial use is not granted by the public license. See COMMERCIAL-LICENSE.md.'
 ]);
+const REQUIRED_VANILLA_TEST_VERSION = '2.1.0';
 
 function addIssue(issues, condition, message) {
   if (!condition) {
@@ -145,8 +146,20 @@ async function validatePackageMetadata(manifest, issues) {
   addIssue(issues, packageLock.lockfileVersion === 3, 'package-lock.json must use lockfileVersion 3.');
   addIssue(issues, packageLock.packages?.['']?.version === packageJson.version,
     'package-lock.json is out of sync with package.json.');
-  addIssue(issues, packageJson.devDependencies?.['vanilla-test'] === '1.4.9',
+  addIssue(
+    issues,
+    packageJson.devDependencies?.['vanilla-test'] === REQUIRED_VANILLA_TEST_VERSION,
     'vanilla-test must remain pinned for reproducible browser tests.');
+  addIssue(
+    issues,
+    packageLock.packages?.['']?.devDependencies?.['vanilla-test'] ===
+      REQUIRED_VANILLA_TEST_VERSION,
+    'package-lock.json must pin the root vanilla-test development dependency.');
+  addIssue(
+    issues,
+    packageLock.packages?.['node_modules/vanilla-test']?.version ===
+      REQUIRED_VANILLA_TEST_VERSION,
+    'package-lock.json must resolve the required vanilla-test version.');
 }
 
 async function validatePackagedLegalFiles(issues) {

@@ -1,5 +1,10 @@
+import { readFileSync } from 'node:fs';
 import VanillaTest from 'vanilla-test';
-import vanillaTestMetadata from 'vanilla-test/package.json' with { type: 'json' };
+
+const vanillaTestMetadata = JSON.parse(readFileSync(
+  new URL('./package.json', import.meta.resolve('vanilla-test')),
+  'utf8'
+));
 
 export const SUITE_NAMES = Object.freeze([
   'Unit',
@@ -9,7 +14,7 @@ export const SUITE_NAMES = Object.freeze([
 ]);
 
 export const VANILLA_TEST_VERSION = vanillaTestMetadata.version;
-const REQUIRED_VANILLA_TEST_VERSION = '1.4.9';
+const REQUIRED_VANILLA_TEST_VERSION = '2.1.0';
 
 export function assert(condition, message = 'Assertion failed.') {
   if (!condition) {
@@ -109,20 +114,20 @@ export function createExtensionHarness() {
   function report() {
     assert(!reported, 'Installed-extension results can only be reported once.');
     reported = true;
-    const frameworkResults = framework.report(false);
+    const frameworkResults = framework.report();
     const suites = summarize(details);
     return {
       complete: true,
       details,
-      failed: frameworkResults.failed.length,
+      failed: frameworkResults.failureCount,
       framework: {
         name: 'vanilla-test',
         results: frameworkResults,
         version: VANILLA_TEST_VERSION
       },
-      passed: frameworkResults.passed.length,
+      passed: frameworkResults.total - frameworkResults.failureCount,
       suites,
-      total: frameworkResults.passed.length + frameworkResults.failed.length
+      total: frameworkResults.total
     };
   }
 
