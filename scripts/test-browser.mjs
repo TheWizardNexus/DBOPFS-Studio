@@ -808,7 +808,7 @@ export async function runBrowserTests(options = {}) {
     }
 
     await page.goto(`${running.origin}/tests/browser/index.html`, {
-      waitUntil: 'networkidle0',
+      waitUntil: 'domcontentloaded',
       timeout: 30_000
     });
     await page.waitForFunction(
@@ -833,8 +833,18 @@ export async function runBrowserTests(options = {}) {
 
     for (const detail of result.details) {
       const marker = detail.status === 'passed' ? 'PASS' : 'FAIL';
-      console.log(`${marker} ${detail.description}${detail.error ? ` — ${detail.error}` : ''}`);
+      console.log(
+        `${marker} [${detail.suite || 'Browser'}] ${detail.description}` +
+        `${detail.error ? ` — ${detail.error}` : ''}`
+      );
     }
+    for (const suite of result.suites || []) {
+      console.log(
+        `SUITE ${suite.name}: ${suite.passed}/${suite.total} passed` +
+        `${suite.failed ? `, ${suite.failed} failed` : ''}`
+      );
+    }
+    console.log(`TOTAL ${result.passed}/${result.total} vanilla-test cases passed.`);
     if (pageErrors.length) {
       throw new Error(`Uncaught browser errors:\n- ${pageErrors.join('\n- ')}`);
     }
