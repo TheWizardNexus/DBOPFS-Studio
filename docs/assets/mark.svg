@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">DBOPFS Studio orbital database mark</title>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="70%">
+      <stop offset="0" stop-color="#151c2d"/>
+      <stop offset="1" stop-color="#030811"/>
+    </radialGradient>
+    <radialGradient id="core" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#f4ecd7"/>
+      <stop offset=".35" stop-color="#ab94ff"/>
+      <stop offset="1" stop-color="#4c3358" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
+  <ellipse cx="64" cy="42" rx="37" ry="13" fill="#0d6b65" fill-opacity=".34" stroke="#d7a84d" stroke-width="3"/>
+  <path d="M27 42v19c0 7 17 13 37 13s37-6 37-13V42" fill="#0d6b65" fill-opacity=".2" stroke="#d7a84d" stroke-width="3"/>
+  <path d="M27 61v19c0 7 17 13 37 13s37-6 37-13V61" fill="#4c3358" fill-opacity=".45" stroke="#d7a84d" stroke-width="3"/>
+  <ellipse cx="64" cy="80" rx="37" ry="13" fill="#4c3358" fill-opacity=".55" stroke="#d7a84d" stroke-width="3"/>
+  <ellipse cx="64" cy="63" rx="53" ry="25" fill="none" stroke="#4abeb2" stroke-width="2" transform="rotate(-24 64 63)"/>
+  <circle cx="16" cy="81" r="5" fill="#4abeb2"/>
+  <circle cx="112" cy="44" r="5" fill="#d7a84d"/>
+  <circle cx="64" cy="55" r="14" fill="url(#core)"/>
+  <circle cx="64" cy="55" r="3.5" fill="#f4ecd7"/>
+</svg>

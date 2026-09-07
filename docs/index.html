@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="DBOPFS Studio is a polished Chromium workspace for exploring, editing, previewing, printing, and managing DBOPFS application data stored in OPFS.">
     <meta name="theme-color" content="#050b16">
-    <link rel="icon" href="data:,">
+    <link rel="icon" type="image/svg+xml" href="assets/mark.svg">
     <link rel="canonical" href="https://thewizardnexus.github.io/DBOPFS-Studio/">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://thewizardnexus.github.io/DBOPFS-Studio/">
@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="assets/site.css">
     <script type="module" src="assets/site.js"></script>
 </head>
-<body data-page="home">
+<body id="top" data-page="home">
     <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="site-header">
         <div class="header-inner">
@@ -39,6 +39,7 @@
                 <a href="architecture.html" data-nav="architecture">Architecture</a>
                 <a href="privacy.html" data-nav="privacy">Privacy</a>
                 <a href="https://github.com/TheWizardNexus/DBOPFS-Studio">GitHub</a>
+                <a href="https://thewizardnexus.com/">TWiN Home</a>
             </nav>
         </div>
     </header>
@@ -47,62 +48,37 @@
         <section class="hero">
             <div class="wrap hero-grid">
                 <div>
-                    <p class="eyebrow">DBOPFS-powered storage workspace</p>
-                    <h1>Your DBOPFS data, made legible.</h1>
-                    <p class="hero-lede">Explore an origin's DBOPFS applications, tables, and records in a focused workspace built for real inspection, editing, previewing, export, and print workflows.</p>
-                    <p><strong>Local browser operation. One-time commercial licensing. No DBOPFS Studio cloud account, monthly subscription, or mandatory recurring license fee is required after purchase.</strong> Optional support, future major-version upgrades, and third-party services may have separate costs.</p>
+                    <p class="eyebrow">DBOPFS Studio</p>
+                    <h1>Explore and edit your browser’s stored data.</h1>
+                    <p class="hero-audience">For developers and technical teams working with DBOPFS-powered apps.</p>
+                    <p class="hero-lede">DBOPFS organizes an app’s browser storage into applications, tables, and records. Explore that data for a connected site in a focused workspace built for inspection, editing, previewing, export, and print workflows.</p>
                     <div class="hero-actions">
-                        <a class="button" href="install.html">Install from source</a>
-                        <a class="button secondary" href="architecture.html">See how it works</a>
-                        <a class="button ghost" href="https://github.com/TheWizardNexus/DBOPFS-Studio">View repository</a>
+                        <a class="button" href="install.html">Install DBOPFS Studio</a>
+                        <a class="button secondary" href="#product-tour">Watch 29-second tour</a>
                     </div>
+                    <p class="license-brief">Noncommercial use under PolyForm terms. Commercial use requires a separate one-time paid license.</p>
+                    <details class="license-details">
+                        <summary>Licensing details <span aria-hidden="true">⌄</span></summary>
+                        <p><strong>Local browser operation. One-time commercial licensing. No DBOPFS Studio cloud account, monthly subscription, or mandatory recurring license fee is required after purchase.</strong> Optional support, future major-version upgrades, and third-party services may have separate costs.</p>
+                        <p><a href="license.html">Read the full licensing terms</a> · <a href="https://github.com/TheWizardNexus/DBOPFS-Studio">View repository</a></p>
+                    </details>
                     <div class="compatibility" aria-label="Target browser support">
                         <strong>Chromium MV3</strong>
                         <span>Chrome</span><span>Edge</span><span>Brave</span><span>Vivaldi</span><span>Opera</span>
                     </div>
                 </div>
 
-                <div class="studio-window" aria-label="Illustration of the DBOPFS Studio workspace">
-                    <div class="window-bar">
-                        <span class="window-dot"></span><span class="window-dot"></span><span class="window-dot"></span>
-                        <span class="window-title">DBOPFS Studio · app.example</span>
+                <figure class="promo-frame hero-tour" id="product-tour">
+                    <div class="promo-player" data-youtube-id="y8FlLBzy-RU">
+                        <button class="promo-play" type="button" data-youtube-play aria-label="Play the 29-second DBOPFS Studio product tour on YouTube">
+                            <img src="https://raw.githubusercontent.com/TheWizardNexus/DBOPFS-Studio/main/promo-video/dbopfs-studio-youtube-thumbnail-1280x720.png" width="1280" height="720" alt="">
+                            <span class="promo-play-icon" aria-hidden="true">▶</span>
+                            <span class="promo-play-label" aria-hidden="true">Play product tour</span>
+                        </button>
+                        <noscript><a href="https://youtu.be/y8FlLBzy-RU">Watch the DBOPFS Studio product tour on YouTube</a>.</noscript>
                     </div>
-                    <div class="studio-grid">
-                        <aside class="studio-sidebar">
-                            <span class="ui-label">Origin storage</span>
-                            <div class="tree">
-                                <span>▾ apps</span>
-                                <span class="indent">▾ field-notes</span>
-                                <span class="deeper active">◇ records</span>
-                                <span class="deeper">◇ attachments</span>
-                                <span class="indent">▸ photo-catalog</span>
-                            </div>
-                        </aside>
-                        <div class="studio-main">
-                            <div class="studio-toolbar">
-                                <span class="crumbs">apps / field-notes / records</span>
-                                <span class="live-chip">connected</span>
-                            </div>
-                            <div class="metric-row">
-                                <div class="metric"><small>Tables</small><strong>06</strong></div>
-                                <div class="metric"><small>Records</small><strong>248</strong></div>
-                                <div class="metric"><small>Storage</small><strong>18 MB</strong></div>
-                            </div>
-                            <div class="editor">
-                                <div class="editor-tabs">observation-0248.json</div>
-                                <pre class="editor-code"><span class="code-key">{</span>
-  <span class="code-key">"title"</span>: <span class="code-value">"Summer survey"</span>,
-  <span class="code-key">"status"</span>: <span class="code-value">"reviewed"</span>,
-  <span class="code-key">"coordinates"</span>: <span class="code-key">{</span>
-    <span class="code-key">"latitude"</span>: <span class="code-number">41.8781</span>,
-    <span class="code-key">"longitude"</span>: <span class="code-number">-87.6298</span>
-  <span class="code-key">}</span>,
-  <span class="code-key">"attachments"</span>: <span class="code-number">3</span>
-<span class="code-key">}</span></pre>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    <figcaption>Shipped DBOPFS Studio UI with fictional demonstration data. Playback is hosted by YouTube.</figcaption>
+                </figure>
             </div>
         </section>
 
@@ -119,17 +95,7 @@
                         <a class="button ghost" href="https://github.com/TheWizardNexus/DBOPFS-Studio/blob/main/promo-video/dbopfs-studio-promo-1080p.mp4">Open the 1080p MP4</a>
                     </div>
                 </div>
-                <figure class="promo-frame">
-                    <div class="promo-player" data-youtube-id="y8FlLBzy-RU">
-                        <button class="promo-play" type="button" data-youtube-play aria-label="Play the 29-second DBOPFS Studio product tour on YouTube">
-                            <img src="https://raw.githubusercontent.com/TheWizardNexus/DBOPFS-Studio/main/promo-video/dbopfs-studio-youtube-thumbnail-1280x720.png" width="1280" height="720" alt="">
-                            <span class="promo-play-icon" aria-hidden="true">▶</span>
-                            <span class="promo-play-label" aria-hidden="true">Play product tour</span>
-                        </button>
-                        <noscript><a href="https://youtu.be/y8FlLBzy-RU">Watch the DBOPFS Studio product tour on YouTube</a>.</noscript>
-                    </div>
-                    <figcaption>Shipped DBOPFS Studio UI with fictional demonstration data. Playback is hosted by YouTube.</figcaption>
-                </figure>
+
                 <details class="promo-transcript">
                     <summary>Read the jingle lyrics and visual summary</summary>
                     <p><strong>Lyrics:</strong> D-B-O-P-F-S Studio, bring your data into view. Apps and tables, records too. Local-first and built for you. Open, inspect, edit, preview. See the structure coming through. Your DBOPFS data made legible. D-B-O-P-F-S Studio.</p>
@@ -235,11 +201,11 @@
                     <p>Chrome and Microsoft Edge are first-class targets. Other current Chromium builds can use the same unpacked Manifest V3 extension when they provide the required APIs; privacy modes, enterprise policies, and native PDF controls may differ.</p>
                 </div>
                 <div class="browser-grid" aria-label="Target browsers">
-                    <div class="browser-card"><span class="browser-letter">C</span><strong>Chrome</strong><small>First-class target</small></div>
-                    <div class="browser-card"><span class="browser-letter">E</span><strong>Microsoft Edge</strong><small>First-class target</small></div>
-                    <div class="browser-card"><span class="browser-letter">B</span><strong>Brave</strong><small>Compatible target</small></div>
-                    <div class="browser-card"><span class="browser-letter">V</span><strong>Vivaldi</strong><small>Compatible target</small></div>
-                    <div class="browser-card"><span class="browser-letter">O</span><strong>Opera</strong><small>Compatible target</small></div>
+                    <div class="browser-card"><img class="browser-logo" src="assets/browsers/chrome.png" width="48" height="48" alt="" loading="lazy"><strong>Chrome</strong><small>First-class target</small></div>
+                    <div class="browser-card"><img class="browser-logo" src="assets/browsers/edge.png" width="48" height="48" alt="" loading="lazy"><strong>Microsoft Edge</strong><small>First-class target</small></div>
+                    <div class="browser-card"><img class="browser-logo" src="assets/browsers/brave.png" width="48" height="48" alt="" loading="lazy"><strong>Brave</strong><small>Compatible target</small></div>
+                    <div class="browser-card"><img class="browser-logo" src="assets/browsers/vivaldi.png" width="48" height="48" alt="" loading="lazy"><strong>Vivaldi</strong><small>Compatible target</small></div>
+                    <div class="browser-card"><img class="browser-logo" src="assets/browsers/opera.png" width="48" height="48" alt="" loading="lazy"><strong>Opera</strong><small>Compatible target</small></div>
                 </div>
                 <div class="callout warning">
                     <p><strong>Capability detection matters.</strong> A Chromium foundation does not make every browser build identical. DBOPFS Studio checks the storage surface it needs and reports unavailable capabilities instead of assuming them.</p>
@@ -273,5 +239,6 @@
             <div class="footer-meta"><span>© <span data-current-year></span> The Wizard Nexus</span><span>Source-available · PolyForm Noncommercial 1.0.0</span></div>
         </div>
     </footer>
+    <a class="back-to-top" href="#top"><span aria-hidden="true">&#8593;</span> Back to top</a>
 </body>
 </html>

@@ -103,6 +103,35 @@ a:hover {
     color: var(--ink-deep);
 }
 
+.back-to-top {
+    align-items: center;
+    background: var(--panel);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    box-shadow: 0 0.3rem 1rem var(--shadow);
+    color: var(--ivory);
+    display: inline-flex;
+    font-size: 0.85rem;
+    font-weight: 700;
+    gap: 0.4rem;
+    min-height: 2.75rem;
+    padding: 0.6rem 1rem;
+    position: fixed;
+    right: max(1rem, env(safe-area-inset-right));
+    text-decoration: none;
+    z-index: 20;
+}
+
+.back-to-top:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+}
+
+body:has(.back-to-top) .site-footer {
+    padding-bottom: 5rem;
+}
+
 .skip-link {
     background: var(--ivory);
     border-radius: var(--radius-sm);
@@ -162,37 +191,11 @@ a:hover {
 }
 
 .brand-mark {
-    background: linear-gradient(145deg, var(--gold), var(--teal-deep) 58%, var(--plum));
-    border: 1px solid rgba(244, 236, 215, 0.4);
-    border-radius: 50%;
-    box-shadow: 0 0 1.25rem rgba(215, 168, 77, 0.2);
-    height: 2rem;
-    position: relative;
-    width: 2rem;
+    background: url("mark.svg") center / contain no-repeat;
+    flex: 0 0 auto;
+    height: 4rem;
+    width: 4rem;
 }
-
-.brand-mark::before,
-.brand-mark::after {
-    background: var(--ink-deep);
-    border: 1px solid rgba(244, 236, 215, 0.45);
-    border-radius: 50%;
-    content: "";
-    left: 50%;
-    position: absolute;
-    transform: translateX(-50%);
-    width: 1.15rem;
-}
-
-.brand-mark::before {
-    height: 0.44rem;
-    top: 0.48rem;
-}
-
-.brand-mark::after {
-    bottom: 0.48rem;
-    height: 0.55rem;
-}
-
 .brand-copy {
     display: grid;
     line-height: 1.05;
@@ -223,7 +226,7 @@ a:hover {
     color: var(--muted);
     font-size: 0.88rem;
     font-weight: 700;
-    padding: 0.58rem 0.72rem;
+    padding: 0.58rem 0.6rem;
     text-decoration: none;
 }
 
@@ -271,7 +274,7 @@ a:hover {
 }
 
 .hero {
-    padding: clamp(4.2rem, 9vw, 8.5rem) 0 clamp(4rem, 8vw, 7rem);
+    padding: clamp(2.5rem, 5vw, 4rem) 0;
 }
 
 .hero-grid {
@@ -279,6 +282,59 @@ a:hover {
     display: grid;
     gap: clamp(2.5rem, 7vw, 6rem);
     grid-template-columns: minmax(0, 0.9fr) minmax(27rem, 1.1fr);
+}
+
+.hero h1 {
+    font-size: clamp(2.2rem, 3.6vw, 3.25rem);
+    max-width: 22ch;
+    line-height: 1.1;
+}
+
+.hero-audience {
+    color: var(--ivory);
+    font-weight: 700;
+    margin: 1rem 0 0;
+}
+
+.hero .hero-lede {
+    margin-top: 0.85rem;
+    font-size: 1.05rem;
+}
+
+.hero .hero-actions {
+    margin-top: 1.25rem;
+}
+
+.hero-tour {
+    margin: 0;
+    scroll-margin-top: 7rem;
+}
+
+.license-brief,
+.license-details {
+    color: var(--muted);
+    font-size: 0.88rem;
+    margin-top: 0.85rem;
+}
+
+.license-details summary {
+    color: var(--teal);
+    cursor: pointer;
+    font-weight: 700;
+    list-style: none;
+}
+
+.license-details summary::-webkit-details-marker {
+    display: none;
+}
+
+.license-details summary span {
+    display: inline-block;
+    margin-left: 0.3rem;
+}
+
+.license-details[open] summary span {
+    transform: rotate(180deg);
 }
 
 .eyebrow {
@@ -584,7 +640,7 @@ h3 {
 
 .section {
     border-top: 1px solid var(--line);
-    padding: clamp(4rem, 8vw, 7rem) 0;
+    padding: clamp(2.5rem, 5vw, 4rem) 0;
 }
 
 .section.soft {
@@ -804,17 +860,10 @@ h3 {
     text-align: center;
 }
 
-.browser-letter {
-    align-items: center;
-    background: linear-gradient(145deg, rgba(215, 168, 77, 0.18), rgba(74, 190, 178, 0.18));
-    border: 1px solid var(--line-strong);
-    border-radius: 50%;
-    color: var(--ivory);
-    display: inline-flex;
-    font-family: var(--display);
-    font-size: 1.4rem;
+.browser-logo {
+    display: inline-block;
     height: 3rem;
-    justify-content: center;
+    object-fit: contain;
     width: 3rem;
 }
 
@@ -966,7 +1015,7 @@ code {
 
 .page-hero {
     border-bottom: 1px solid var(--line);
-    padding: clamp(4rem, 8vw, 7rem) 0;
+    padding: clamp(2.5rem, 5vw, 4rem) 0;
 }
 
 .page-hero h1 {
