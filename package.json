@@ -18,6 +18,16 @@
     "package": "node scripts/package-extension.mjs",
     "release:test": "node scripts/release-test.mjs"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheWizardNexus/DBOPFS-Studio.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TheWizardNexus/DBOPFS-Studio/issues"
+  },
+  "homepage": "https://thewizardnexus.github.io/DBOPFS-Studio/",
+  "author": "The Wizard Nexus",
+  "license": "PolyForm-Noncommercial-1.0.0",
   "engines": {
     "node": ">=22.12"
   },
