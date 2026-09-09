@@ -1381,3 +1381,363 @@ code {
         transition-duration: 0.01ms !important;
     }
 }
+
+/* Local 1980s art-direction preview. Original page content and artwork retained. */
+:root {
+ --ink:#090619; --ink-deep:#050311; --panel:#141029; --panel-raised:#211636;
+ --panel-soft:#201632; --text:#f5efff; --muted:#c2b9d7; --ivory:#fff4e6;
+ --gold:#ffcf76; --gold-soft:rgba(255,193,93,.13); --teal:#72f2ee;
+ --teal-deep:#136a79; --violet:#f18cff; --line:rgba(162,114,222,.25);
+ --line-strong:rgba(239,101,220,.5);
+ --display: 'Arial Black', 'Segoe UI', sans-serif;
+ --radius-sm:.2rem; --radius:.4rem; --radius-lg:.6rem;
+}
+body {
+ background:radial-gradient(ellipse at 90% 9%,rgba(217,43,172,.18),transparent 38rem),radial-gradient(ellipse at 8% 24%,rgba(41,186,227,.12),transparent 38rem),#090619;
+}
+body::before {display:none;}
+.site-header {background:rgba(10,6,26,.96);border-bottom:1px solid #e26ed7;box-shadow:0 2px 22px #d843b426;}
+.brand-copy strong {font-family:var(--body);font-weight:850;letter-spacing:.06em;}
+.brand-copy small {color:#81e4e2;}
+.hero {position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(180deg,rgba(16,8,34,.1),rgba(30,12,49,.65));border-bottom:1px solid #784370;}
+.hero::before {content:'';position:absolute;z-index:-1;width:28rem;height:28rem;border-radius:50%;right:5%;top:1.5rem;background:repeating-linear-gradient(to bottom,transparent 0 18px,#160a2b 18px 23px),linear-gradient(#ffce7a,#f25aa4 55%,#aa40c5);opacity:.16;pointer-events:none;}
+.hero::after {content:'';position:absolute;z-index:-1;left:-50%;bottom:-12rem;width:200%;height:25rem;background-image:linear-gradient(#cf57d652 1px,transparent 1px),linear-gradient(90deg,#8c6cfa4a 1px,transparent 1px);background-size:4rem 2.5rem;transform:perspective(260px) rotateX(52deg);mask-image:linear-gradient(transparent,#000);pointer-events:none;}
+h1 {font-weight:900;font-style:italic;letter-spacing:-.035em;line-height:1.12;text-shadow:3px 3px 0 #80408b,0 0 26px #c73cd32b;}
+h2,h3 {font-weight:800;letter-spacing:-.02em;}
+.eyebrow {font-family:var(--mono);color:#7cf3ef;letter-spacing:.17em;}
+.hero-audience {color:#ffd4a2;}
+.button {background:linear-gradient(115deg,#ffd47e,#ff9ed7);border-color:#ffc1c5;color:#190a29;box-shadow:3px 3px 0 #6e327f;font-weight:800;border-radius:.2rem;}
+.button:hover {background:#ffe4ac;color:#160b26;box-shadow:3px 3px 0 #b04db6;}
+.button.secondary,.button.ghost {background:#120d27;color:#8df7f1;border:1px solid #5bc9d1;box-shadow:3px 3px 0 #174853;}
+.promo-frame {border:1px solid #bd68d3;box-shadow:7px 7px 0 #432653,0 0 32px #c143bc20;border-radius:.5rem;background:#130e25;}
+.promo-play-icon {box-shadow:0 0 25px #f688dc55;}
+.license-details,.promo-transcript {border-color:#735087;background:rgba(17,11,33,.8);}
+summary {color:#edbcff;}
+.section.soft {background:linear-gradient(115deg,rgba(65,26,75,.22),rgba(12,32,50,.3));border-block:1px solid #5d39664d;}
+.card,.browser-card {background:linear-gradient(145deg,#20142f,#100d22);border-color:#765080;box-shadow:0 5px 0 #060312;}
+.site-nav a[aria-current='page'] {color:#9cfff7;background:#72f2ee0d;box-shadow:inset 0 -2px #72f2ee;}
+.site-footer {border-top:1px solid #ac599275;background:#080615;}
+.back-to-top {background:#20122f;border:1px solid #ef9cdd;border-radius:.2rem;box-shadow:3px 3px 0 #63315e;}
+@media (max-width:720px) {h1 {text-shadow:2px 2px 0 #80408b;}.hero::before {right:-12rem;}.promo-frame {box-shadow:4px 4px 0 #432653;}}
+
+/* Compact spacing for the local retro preview. */
+.hero {padding:clamp(1.5rem,3vw,2.25rem) 0;}
+.hero-grid {gap:clamp(1.25rem,3vw,2.5rem);}
+.hero .eyebrow {margin-bottom:.6rem;}
+.hero-audience {margin-top:.75rem;}
+.hero .hero-lede {margin-top:.65rem;}
+.hero .hero-actions {margin-top:1rem;gap:.65rem;}
+.compatibility {margin-top:1rem;}
+.section {padding-block:clamp(1.75rem,3vw,2.5rem);}
+.section-heading {margin-bottom:1.25rem;}
+.section-heading p {margin-top:.65rem;}
+.promo-intro {gap:1rem;}
+.promo-section .section-heading {margin-bottom:.75rem;}
+.promo-section .hero-actions {margin-top:.75rem;}
+.split {gap:clamp(1.25rem,3vw,2.5rem);}
+.card {padding:1.25rem;}
+.browser-card {padding:.8rem;}
+@media(max-width:720px) {
+ .hero {padding-block:1.25rem;}
+ .hero-grid {gap:1.25rem;}
+ .section {padding-block:1.5rem;}
+ .card {padding:1rem;}
+}
+.section .hero-actions {margin-top:1rem;}
+.site-footer {padding-top:1.75rem;}
+.footer-grid {gap:1.5rem;}
+.compatibility span {display:inline-flex;align-items:center;gap:.35rem;}
+.compatibility span img {width:20px;height:20px;object-fit:contain;flex:none;}
+
+/* Direct navigation at every width; no collapsed menu. */
+.nav-toggle {display:none;}
+.header-inner {flex-wrap:wrap;gap:.35rem 1rem;}
+.site-nav,.site-nav[data-open="true"] {display:flex;flex-wrap:wrap;position:static;inset:auto;background:transparent;border:0;padding:0;gap:.15rem;}
+.site-nav a {min-height:2.75rem;display:inline-flex;align-items:center;white-space:nowrap;}
+@media(max-width:62rem) {
+ .site-nav {flex:1 1 100%;}
+ .header-inner {padding-block:.5rem;}
+ html {scroll-padding-top:10rem;}
+ .hero-tour {scroll-margin-top:10rem;}
+}
+@media(max-width:26rem) {
+ .site-nav a {padding-inline:.45rem;font-size:.8rem;}
+}
+
+/* Keep brand and direct navigation together in one row. */
+.header-inner {flex-wrap:nowrap;gap:.75rem;}
+.site-nav,.site-nav[data-open="true"] {flex:0 1 auto;flex-wrap:nowrap;gap:.1rem;min-width:0;}
+.site-nav a {padding-inline:.45rem;}
+@media(max-width:62rem) {
+ .header-inner {padding-inline:1rem;gap:.5rem;}
+ .brand {gap:.5rem;}
+ .brand-copy strong {font-size:1rem;}
+ .site-nav a {font-size:.8rem;padding-inline:.35rem;}
+}
+@media(max-width:42rem) {
+ .header-inner {overflow-x:auto;}
+ .brand,.site-nav {flex-shrink:0;}
+ .site-nav a {min-height:2.75rem;}
+}
+
+/* Readable navigation without shrinking labels at narrow widths. */
+.site-nav a {font-size:1rem;padding-inline:.6rem;min-height:2.75rem;}
+@media(max-width:62rem) {
+ .site-nav a {font-size:1rem;padding-inline:.5rem;}
+ .header-inner {overflow-x:auto;}
+ .brand,.site-nav {flex-shrink:0;}
+}
+
+/* Neon arcade frames for the information cards. */
+.card {
+ --card-neon:#73f5ed;
+ position:relative;isolation:isolate;
+ border:1px solid var(--card-neon);border-top-width:3px;border-radius:2px;
+ background:linear-gradient(135deg,#241335,#100d23 65%);
+ box-shadow:5px 5px 0 #090619,6px 6px 0 var(--card-neon),0 0 18px #57ddd31a,inset 0 0 24px #7552a512;
+ padding-top:1.4rem;padding-bottom:1.5rem;
+}
+.card:nth-child(even) {--card-neon:#ff85d6;}
+.card:nth-child(3n) {--card-neon:#ffd17d;}
+.card::before {
+ content:'';display:block;width:4.5rem;height:.4rem;margin-bottom:.85rem;
+ background:repeating-linear-gradient(120deg,var(--card-neon) 0 5px,transparent 5px 9px);
+ pointer-events:none;
+}
+.card::after {
+ content:'';position:absolute;right:.65rem;bottom:.6rem;width:3.5rem;height:.55rem;
+ background:repeating-linear-gradient(120deg,var(--card-neon) 0 5px,transparent 5px 9px);
+ opacity:.55;pointer-events:none;
+}
+.card h3 {color:var(--ivory);text-shadow:2px 2px 0 #ab378166;}
+.card p,.card li {color:#d4cce4;}
+.card-number {margin-bottom:.7rem;color:var(--card-neon);}
+.card-grid {gap:1.25rem;}
+
+/* Five compact browser cards in a single row. */
+.browser-grid {grid-template-columns:repeat(5,minmax(8rem,1fr));gap:.5rem;overflow-x:auto;padding-bottom:.4rem;}
+.browser-card {padding:.65rem .4rem;min-height:0;}
+.browser-card .browser-logo {width:1.75rem;height:1.75rem;}
+.browser-card strong {font-size:.85rem;margin-top:.25rem;line-height:1.3;}
+.browser-card small {font-size:.72rem;margin-top:.15rem;line-height:1.3;}
+
+body[data-page="architecture"] .page-hero h1 {
+ max-width:none;
+ font-size:clamp(1.35rem,5.7vw,3.4rem);
+ white-space:nowrap;
+}
+
+/* Shared arcade framing across all boxed content in the preview. */
+:is(.diagram-box,.permission-row,.callout,.code-card,.browser-card,.steps li,.license-details,.promo-transcript,.promo-frame,.metric,.editor,.studio-window) {
+ --box-neon:#73f5ed;
+ border:1px solid var(--box-neon);border-top-width:3px;border-radius:2px;
+ background:repeating-linear-gradient(120deg,var(--box-neon) 0 4px,transparent 4px 8px) right .65rem top .35rem / 2.5rem 4px no-repeat,linear-gradient(135deg,#241335,#100d23 65%);
+ box-shadow:3px 3px 0 #090619,4px 4px 0 var(--box-neon),0 0 16px #57ddd31a;
+}
+:is(.diagram-box,.permission-row,.browser-card,.steps li):nth-child(even),.code-card,.promo-frame {--box-neon:#ff85d6;}
+:is(.diagram-box,.browser-card):nth-child(3n),.callout.warning {--box-neon:#ffd17d;}
+.callout.warning {border-left:3px solid var(--box-neon);}
+.diagram-box {padding-top:1.25rem;}
+.diagram-box strong {color:var(--ivory);text-shadow:1px 1px 0 #ab378166;}
+.diagram-box small,.permission-row span {color:#d4cce4;}
+.code-card__header {background:#25122f;border-bottom-color:#ff85d6;}
+.steps li::before {border-radius:2px;border-color:var(--box-neon);color:var(--box-neon);background:#130b25;}
+.license-details,.promo-transcript {padding:.65rem .8rem;}
+:is(.compatibility span,.copy-button,.live-chip,.promo-play-label) {border-radius:2px;border-color:#73f5ed;box-shadow:2px 2px 0 #623269;background-color:#160e27;}
+.prose table {border:1px solid #73f5ed;box-shadow:3px 3px 0 #6e397b;background:#100d23;}
+.prose th {background:#25122f;border-bottom-color:#ff85d6;}
+:not(pre)>code {border-color:#ad6abb;border-radius:2px;background:#22132e;}
+
+/* Installation instructions use quieter accents for easier scanning. */
+body[data-page="install"] .steps li {
+ --box-neon:#73f5ed;
+ background:#151024;border:1px solid #655073;border-left:3px solid var(--box-neon);
+ box-shadow:none;padding: .85rem 1rem .85rem 3.5rem;min-height:0;
+}
+body[data-page="install"] .steps li::before {
+ background:none;border:none;box-shadow:none;color:#73f5ed;
+ left:.65rem;top:.85rem;font-size:.85rem;
+}
+body[data-page="install"] :is(.code-card,.callout) {
+ background:#151024;border:1px solid #655073;border-left:3px solid #73f5ed;box-shadow:none;
+}
+body[data-page="install"] .callout.warning {border-left-color:#ffd17d;}
+body[data-page="install"] .code-card__header {background:#21162f;border-bottom-color:#655073;}
+body[data-page="install"] .copy-button {box-shadow:none;border-color:#9c7cae;}
+body[data-page="install"] .prose table {box-shadow:none;border-color:#655073;}
+body[data-page="install"] :not(pre)>code {border:0;background:#2a1c36;padding:.1em .25em;}
+
+/* One installation panel with four divided steps. */
+body[data-page="install"] .steps {
+ gap:0;background:#151024;border:1px solid #655073;
+ border-left:3px solid #73f5ed;border-radius:2px;overflow:hidden;
+}
+body[data-page="install"] .steps li {
+ background:transparent;border:0;border-radius:0;box-shadow:none;
+}
+body[data-page="install"] .steps li + li {border-top:1px solid #65507380;}
+body[data-page="install"] .steps li strong {display:inline;margin:0;}
+body[data-page="install"] .steps li > strong:first-child {display:block;margin-bottom:.2rem;}
+
+/* Comfortable reading sizes for supporting text. */
+body {font-size:17px;}
+.diagram-box strong,.browser-card strong {font-size:1rem;}
+.diagram-box small,.browser-card small {font-size:.875rem;line-height:1.5;}
+.page-toc a,.permission-row span,.card-number,.compatibility {font-size:.9rem;}
+.page-toc strong,.eyebrow {font-size:.8rem;}
+.license-brief,.license-details,.promo-frame figcaption,.code-card__header,.footer-meta {font-size:.95rem;}
+.copy-button {font-size:.875rem;padding:.35rem .65rem;}
+.prose table {font-size:1rem;}
+.browser-grid {grid-template-columns:repeat(5,minmax(8.5rem,1fr));}
+
+body.has-section-selector .page-layout {grid-template-columns:1fr;gap:1.5rem;}
+body.has-section-selector .section-selector {
+ position:static;order:0;display:flex;flex-wrap:wrap;gap:.5rem;
+ padding:1rem;border:1px solid #73f5ed;border-top:3px solid #73f5ed;
+ border-radius:2px;background:linear-gradient(135deg,#241335,#100d23);
+ box-shadow:3px 3px 0 #090619,4px 4px 0 #ff85d6;scroll-margin-top:7rem;
+}
+.section-selector strong {flex-basis:100%;margin:0 0 .2rem;color:#ffd17d;}
+body.has-section-selector .section-selector a {
+ display:inline-flex;align-items:center;padding:.45rem .7rem;min-height:2.75rem;
+ font-size:1rem;border:1px solid #846092;border-radius:2px;color:#eee7f6;background:#151024;
+}
+body.has-section-selector .section-selector a:hover {border-color:#73f5ed;}
+body.has-section-selector .section-selector a[aria-current="true"] {
+ color:#140c22;background:#83eee8;border-color:#83eee8;font-weight:800;
+}
+.content-section[hidden] {display:none;}
+.content-section + .content-section {margin-top:2rem;}
+.content-section[hidden] + .content-section {margin-top:0;}
+@media print { .content-section[hidden] {display:block;} .section-selector {display:none !important;} }
+
+/* Even section-selector spacing, independent of older page-link margins. */
+body.has-section-selector .section-selector {
+ gap:.5rem;padding:.85rem 1rem;align-items:center;align-content:start;
+}
+body.has-section-selector .section-selector strong {margin:0 0 .15rem;line-height:1.4;}
+body.has-section-selector .section-selector a {margin:0;padding:.5rem .75rem;line-height:1.35;}
+body.has-section-selector .page-layout {gap:1.25rem;}
+body.has-section-selector .content-section > h2:first-child {margin-top:0;}
+
+body[data-page="install"] .page-hero h1 {
+ max-width:none;font-size:clamp(1rem,4.5vw,3.4rem);white-space:nowrap;
+}
+
+/* Neon reinterpretation of the original orbital paths within the sunset. */
+.brand-mark {background-image:url("mark-retro.svg");filter:drop-shadow(0 0 5px #fa64cd55) drop-shadow(0 0 2px #75fff466);}
+.hero-sun-logo {
+ position:absolute;z-index:-1;right:5%;top:1.5rem;width:28rem;height:28rem;
+ object-fit:contain;padding:2.6rem;opacity:.38;pointer-events:none;
+ filter:drop-shadow(0 0 7px #ff64d4) drop-shadow(0 0 3px #75fff4);
+}
+@media(max-width:720px) {
+ .hero-sun-logo {right:-12rem;}
+}
+
+/* Keep the original center light legible without hazing the copy. */
+.hero-sun-logo {opacity:.48;filter:drop-shadow(0 0 2px #ff64d466);}
+.hero-grid > div:first-child {position:relative;isolation:isolate;}
+.hero-grid > div:first-child::before {
+ content:'';position:absolute;inset:-1rem -1.25rem;z-index:-1;pointer-events:none;
+ background:linear-gradient(90deg,rgba(12,8,27,.94),rgba(12,8,27,.84) 65%,rgba(12,8,27,.2));
+ border-radius:1rem;
+}
+.hero .hero-lede,.hero .license-brief {color:#e4dfee;}
+.hero-grid > div:first-child::before {
+ background:linear-gradient(90deg,rgba(12,8,27,.8),rgba(12,8,27,.45) 65%,transparent);
+ border-radius:0;mask-image:linear-gradient(transparent,#000 10%,#000 90%,transparent);
+}
+.hero-grid > div:first-child {text-shadow:0 1px 3px #090619,0 0 6px #090619;}
+.brand-mark {background-image:url("mark-retro.svg?detail=2");}
+.hero-grid > div:first-child {text-shadow:none;}
+.hero .hero-lede,.hero .hero-audience,.hero .license-brief {text-shadow:0 1px 3px #090619;}
+
+/* Opaque reading surface keeps decorative artwork out of the paragraph. */
+.hero .hero-lede {
+ background:#100b20;color:#f3eefb;text-shadow:none;
+ padding:.8rem 1rem;border-left:2px solid #73f5ed;border-radius:2px;
+ font-size:1.125rem;line-height:1.65;
+}
+
+/* Give the artwork its own space instead of placing it under the copy. */
+.hero::before,.hero-grid > div:first-child::before {display:none;}
+.hero-intro-layout {display:grid;grid-template-columns:minmax(0,1fr) 15rem;gap:1.25rem;align-items:center;}
+.hero-intro-copy {min-width:0;}
+.hero-brand-art {position:relative;isolation:isolate;aspect-ratio:1;}
+.hero-brand-art::before {content:'';position:absolute;inset:0;border-radius:50%;z-index:-1;background:repeating-linear-gradient(to bottom,transparent 0 12px,#100b20 12px 17px),linear-gradient(#ffcc7c,#ec60b2 55%,#8c3ec3);opacity:.6;}
+.hero-brand-art img {width:100%;padding:1.4rem;filter:drop-shadow(0 0 4px #ff64d455);}
+.hero .hero-lede {background:transparent;border:0;padding:0;color:#f3eefb;font-size:1.125rem;}
+@media(min-width:62.01rem) {
+ .hero-grid {grid-template-columns:minmax(0,1.1fr) minmax(22rem,.9fr);}
+ .hero-intro-layout {grid-template-columns:minmax(0,1fr) 11rem;gap:1rem;}
+ .hero h1 {font-size:clamp(2rem,2.7vw,2.75rem);}
+}
+@media(max-width:40rem) {
+ .hero-intro-layout {grid-template-columns:1fr;gap:.75rem;}
+ .hero-brand-art {width:12rem;justify-self:center;}
+}
+
+/* Slightly larger hero artwork with its own reserved column. */
+.hero-intro-layout {grid-template-columns:minmax(0,1fr) 17rem;}
+@media(min-width:62.01rem) {
+ .hero-intro-layout {grid-template-columns:minmax(0,1fr) 13rem;}
+}
+@media(max-width:40rem) {
+ .hero-intro-layout {grid-template-columns:1fr;}
+ .hero-brand-art {width:14rem;}
+}
+
+/* Finish the striped sun with an unbroken curved lower edge. */
+.hero-brand-art::before {
+ background:linear-gradient(to top,#8c3ec3 0 12px,transparent 12px),repeating-linear-gradient(to bottom,transparent 0 12px,#100b20 12px 17px),linear-gradient(#ffcc7c,#ec60b2 55%,#8c3ec3);
+ border-radius:50%;
+}
+
+/* Slow screensaver drift stays within the artwork's reserved space. */
+.hero-brand-art {animation:retro-drift 36s linear infinite,retro-colors 48s linear infinite;}
+@keyframes retro-drift {
+ 0%,100% {transform:translate(0,0);}
+ 20% {transform:translate(6px,-18px);}
+ 45% {transform:translate(-6px,18px);}
+ 70% {transform:translate(6px,8px);}
+ 90% {transform:translate(-6px,-18px);}
+}
+@keyframes retro-colors {
+ 0%,100% {filter:hue-rotate(0deg);}
+ 50% {filter:hue-rotate(180deg);}
+}
+.hero-brand-art.is-home {animation:none;transform:none;filter:none;}
+.hero-motion-toggle {font:inherit;font-size:.85rem;color:#bdf7f3;background:#151024;border:1px solid #846092;border-radius:2px;padding:.4rem .65rem;cursor:pointer;}
+.hero-motion-toggle:focus-visible {outline:2px solid #73f5ed;outline-offset:3px;}
+@media(prefers-reduced-motion:reduce) {
+ .hero-brand-art {animation:none;}
+ .hero-motion-toggle {display:none;}
+}
+
+/* Roaming artwork sits beneath page content and never captures clicks. */
+body {isolation:isolate;}
+body > header,body > main,body > footer {position:relative;z-index:1;}
+.hero-brand-art {animation:none;}
+.hero-roaming-art {position:fixed;margin:0;z-index:0;pointer-events:none;animation:retro-colors 48s linear infinite;opacity:.65;}
+.hero-art-home {aspect-ratio:1;width:100%;}
+.hero-motion-toggle {position:relative;z-index:2;}
+@media(prefers-reduced-motion:reduce) {.hero-roaming-art {animation:none;}}
+
+/* Bounce against the entire document, including content below the fold. */
+body {position:relative;}
+.hero-roaming-art {position:absolute;}
+
+/* Keep the moving decoration quiet beneath readable page content. */
+.hero-roaming-art {opacity:.25;}
+
+/* The home control stays in place while the artwork roams the viewport. */
+.hero-art-home {position:relative;}
+.hero-art-home > .hero-motion-toggle {
+ position:absolute;top:calc(100% + .35rem);left:50%;transform:translateX(-50%);
+ white-space:nowrap;min-height:2.75rem;font-size:.9rem;
+}
+.hero-roaming-art {position:fixed;}
+@media(max-width:40rem) {
+ .hero-art-home {width:14rem;justify-self:center;margin-bottom:3.25rem;}
+}

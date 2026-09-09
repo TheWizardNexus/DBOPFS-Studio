@@ -10,9 +10,9 @@
     <meta property="og:type" content="article">
     <meta property="og:title" content="DBOPFS Studio architecture">
     <meta property="og:description" content="A DBOPFS-first extension architecture that connects explicitly to one Chromium origin at a time.">
-    <title>Architecture — DBOPFS Studio</title>
+    <title>Architecture | DBOPFS Studio</title>
     <link rel="stylesheet" href="assets/site.css">
-    <script type="module" src="assets/site.js"></script>
+    <script type="module" src="assets/site.js?sections=2"></script>
 </head>
 <body id="top" data-page="architecture">
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -20,7 +20,7 @@
         <div class="header-inner">
             <a class="brand" href="index.html" aria-label="DBOPFS Studio home"><span class="brand-mark" aria-hidden="true"></span><span class="brand-copy"><strong>DBOPFS Studio</strong><small>The Wizard Nexus</small></span></a>
             <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation"><span class="nav-toggle__icon" aria-hidden="true"></span><span>Menu</span></button>
-            <nav class="site-nav" id="site-navigation" aria-label="Primary navigation"><a href="index.html" data-nav="home">Overview</a><a href="install.html" data-nav="install">Install</a><a href="architecture.html" data-nav="architecture">Architecture</a><a href="privacy.html" data-nav="privacy">Privacy</a><a href="https://github.com/TheWizardNexus/DBOPFS-Studio">GitHub</a><a href="https://thewizardnexus.com/">TWiN Home</a></nav>
+            <nav class="site-nav" id="site-navigation" aria-label="Primary navigation"><a href="install.html" data-nav="install">Install</a><a href="architecture.html" data-nav="architecture">Architecture</a><a href="privacy.html" data-nav="privacy">Privacy</a><a href="https://github.com/TheWizardNexus/DBOPFS-Studio">GitHub</a><a href="https://thewizardnexus.com/">TWiN Home</a></nav>
         </div>
     </header>
 
@@ -29,7 +29,7 @@
             <div class="wrap">
                 <p class="eyebrow">Architecture and trust model</p>
                 <h1>DBOPFS at the center.</h1>
-                <p class="page-lede">The Studio is a Chromium workspace around the DBOPFS module—not a generic file explorer wearing DBOPFS branding. The current 0.1 interface uses DBOPFS semantics for its application, table, and record workflows.</p>
+                <p class="page-lede">The Studio is a Chromium workspace around the DBOPFS module, not a generic file explorer wearing DBOPFS branding. The current 0.1 interface uses DBOPFS semantics for its application, table, and record workflows.</p>
             </div>
         </section>
 
@@ -47,7 +47,7 @@
                     </div>
 
                     <h3>1. Studio workspace</h3>
-                    <p>The user-facing dashboard and editor run under the extension's own origin. They do not directly call <code>navigator.storage.getDirectory()</code>, because that would open the extension's private OPFS—not the website's.</p>
+                    <p>The user-facing dashboard and editor run under the extension's own origin. They do not directly call <code>navigator.storage.getDirectory()</code>, because that would open the extension's private OPFS, not the website's.</p>
 
                     <h3>2. Isolated extension bridge</h3>
                     <p>A Manifest V3 content script provides a dormant isolated bridge on permitted HTTP(S) pages. The workspace associates each operation with its selected tab, and requests and results travel through extension messaging rather than shared filesystem handles or DOM events.</p>
@@ -107,7 +107,7 @@
 
                     <h2 id="browser-support">Browser support strategy</h2>
                     <p>Chrome and Microsoft Edge are first-class test targets. Brave, Vivaldi, Opera, and other Chromium browsers are compatibility targets when they provide the required Manifest V3 scripting and OPFS APIs. Capability detection is preferred over user-agent assumptions.</p>
-                    <p>A shared Chromium engine does not guarantee identical extension policy, storage quota, persistence, partitioning, protected pages, DevTools behavior, or PDF tools. Compatibility reports should include the browser and version, operating system, page origin shape, and the unavailable capability—without including private OPFS content.</p>
+                    <p>A shared Chromium engine does not guarantee identical extension policy, storage quota, persistence, partitioning, protected pages, DevTools behavior, or PDF tools. Compatibility reports should include the browser and version, operating system, page origin shape, and the unavailable capability, without including private OPFS content.</p>
 
                     <h2 id="non-goals">Deliberate non-goals</h2>
                     <ul>

@@ -10,9 +10,9 @@
     <meta property="og:type" content="article">
     <meta property="og:title" content="Install DBOPFS Studio">
     <meta property="og:description" content="Load the DBOPFS-powered OPFS workspace from source in a compatible Chromium browser.">
-    <title>Install — DBOPFS Studio</title>
+    <title>Install | DBOPFS Studio</title>
     <link rel="stylesheet" href="assets/site.css">
-    <script type="module" src="assets/site.js"></script>
+    <script type="module" src="assets/site.js?sections=3"></script>
 </head>
 <body id="top" data-page="install">
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -20,7 +20,7 @@
         <div class="header-inner">
             <a class="brand" href="index.html" aria-label="DBOPFS Studio home"><span class="brand-mark" aria-hidden="true"></span><span class="brand-copy"><strong>DBOPFS Studio</strong><small>The Wizard Nexus</small></span></a>
             <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation"><span class="nav-toggle__icon" aria-hidden="true"></span><span>Menu</span></button>
-            <nav class="site-nav" id="site-navigation" aria-label="Primary navigation"><a href="index.html" data-nav="home">Overview</a><a href="install.html" data-nav="install">Install</a><a href="architecture.html" data-nav="architecture">Architecture</a><a href="privacy.html" data-nav="privacy">Privacy</a><a href="https://github.com/TheWizardNexus/DBOPFS-Studio">GitHub</a><a href="https://thewizardnexus.com/">TWiN Home</a></nav>
+            <nav class="site-nav" id="site-navigation" aria-label="Primary navigation"><a href="install.html" data-nav="install">Install</a><a href="architecture.html" data-nav="architecture">Architecture</a><a href="privacy.html" data-nav="privacy">Privacy</a><a href="https://github.com/TheWizardNexus/DBOPFS-Studio">GitHub</a><a href="https://thewizardnexus.com/">TWiN Home</a></nav>
         </div>
     </header>
 
@@ -50,7 +50,7 @@
                     <ol class="steps">
                         <li><strong>Open extension management.</strong>Use your browser's internal extensions page from the table below.</li>
                         <li><strong>Enable Developer mode.</strong>The switch is usually at the top-right or in the extensions-page navigation.</li>
-                        <li><strong>Choose Load unpacked.</strong>Select <code>DBOPFS-Studio/extension/</code>—the folder containing <code>manifest.json</code>, not the repository root.</li>
+                        <li><strong>Choose Load unpacked.</strong>Select <code>DBOPFS-Studio/extension/</code>, the folder containing <code>manifest.json</code>, not the repository root.</li>
                         <li><strong>Choose an entry path.</strong>Pin DBOPFS Studio to open it from the toolbar, or open DevTools and use the <strong>DBOPFS Studio</strong> panel to launch a dedicated Studio window for the inspected page.</li>
                     </ol>
 
@@ -70,7 +70,7 @@
                     </div>
 
                     <h2 id="connect">3. Connect an origin</h2>
-                    <p>Open the website whose storage you intend to inspect. The website must itself have access to OPFS—normally that means HTTPS or localhost. Use the toolbar popup to open Studio in a browser tab, or open that page’s DevTools, select the DBOPFS Studio panel, and choose <strong>Open Studio window</strong>.</p>
+                    <p>Open the website whose storage you intend to inspect. The website must itself have access to OPFS; normally that means HTTPS or localhost. Use the toolbar popup to open Studio in a browser tab, or open that page’s DevTools, select the DBOPFS Studio panel, and choose <strong>Open Studio window</strong>.</p>
                     <p>The browser grants the extension access to HTTP(S) pages when you install or approve it. A dormant isolated content-script bridge is available on those pages; the Studio sends DBOPFS requests only to the tab you select. On first request, that bridge imports the packaged agent in the same isolated world. Browser storage accessed from a content script remains scoped to the host page's origin, so OPFS resolves to the inspected website rather than the extension.</p>
                     <div class="callout">
                         <p><strong>Check the origin before editing.</strong> Protocol, hostname, and port identify the OPFS boundary. <code>https://app.example</code> and <code>https://admin.example</code> do not share one OPFS root.</p>
