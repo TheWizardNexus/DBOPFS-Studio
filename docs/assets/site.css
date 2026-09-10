@@ -1741,3 +1741,18 @@ body {position:relative;}
 @media(max-width:40rem) {
  .hero-art-home {width:14rem;justify-self:center;margin-bottom:3.25rem;}
 }
+
+/* Keep the approved two-part introduction at desktop widths as well. */
+.hero-grid {grid-template-columns:minmax(0,1fr);align-items:start;}
+.hero-intro-layout {grid-template-columns:minmax(0,1fr) 17rem;gap:1.5rem;}
+.hero-intro-copy {max-width:48rem;}
+.hero .hero-lede {max-width:65ch;}
+.hero-tour {width:100%;max-width:60rem;justify-self:center;}
+.compatibility {flex-wrap:nowrap;overflow-x:auto;padding-bottom:.4rem;}
+.compatibility > * {flex-shrink:0;}
+@media(min-width:62.01rem) {
+ .hero h1 {font-size:clamp(2.5rem,3.8vw,3.4rem);}
+}
+@media(max-width:40rem) {
+ .hero-intro-layout {grid-template-columns:1fr;gap:.75rem;}
+}
