@@ -157,7 +157,7 @@ function installHeroMotion() {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'hero-motion-toggle';
-    button.textContent = 'Pause animation';
+    button.textContent = 'Resume';
     home.append(button);
     let moving = false, frame = 0, last = 0, x = 0, y = 0, vx = -18, vy = 14.4;
     let pointer = null;
@@ -202,31 +202,41 @@ function installHeroMotion() {
         frame = requestAnimationFrame(tick);
     }
     function start() {
-        const rect = home.getBoundingClientRect();
-        x = rect.left; y = rect.top; last = 0;
-        art.style.width = `${rect.width}px`;
-        art.style.left = '0'; art.style.top = '0';
-        art.style.transform = `translate(${x}px, ${y}px)`;
-        art.classList.add('hero-roaming-art');
-        document.body.append(art);
+        if (!art.classList.contains('hero-roaming-art')) {
+            const rect = home.getBoundingClientRect();
+            x = rect.left; y = rect.top;
+            art.style.width = `${rect.width}px`;
+            art.style.left = '0'; art.style.top = '0';
+            art.style.transform = `translate(${x}px, ${y}px)`;
+            art.classList.add('hero-roaming-art');
+            document.body.append(art);
+        }
+        last = 0;
+        art.style.animationPlayState = 'running';
         moving = true;
-        button.textContent = 'Pause animation';
+        button.textContent = 'Pause';
         frame = requestAnimationFrame(tick);
     }
     function stop() {
         cancelAnimationFrame(frame);
+        art.style.animationPlayState = 'paused';
+        moving = false;
+        button.textContent = 'Resume';
+    }
+    function resetHome() {
+        stop();
+        clearPointer();
         art.classList.remove('hero-roaming-art');
         art.removeAttribute('style');
         home.append(art);
-        moving = false;
-        button.textContent = 'Resume animation';
     }
+    window.addEventListener('pagehide', resetHome);
     button.addEventListener('click', () => moving ? stop() : start());
     document.addEventListener('visibilitychange', () => {
         cancelAnimationFrame(frame); last = 0;
         if (!document.hidden && moving) frame = requestAnimationFrame(tick);
     });
-    matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', event => {if (event.matches) stop();});
+    matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', event => {if (event.matches) resetHome();});
     stop();
 }
 installHeroMotion();
