@@ -3,13 +3,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Install DBOPFS Studio as an unpacked extension in Chrome, Microsoft Edge, Brave, Vivaldi, Opera, and compatible Chromium browsers.">
+    <meta name="description" content="Install DBOPFS Studio from the Chrome Web Store or load it from source in a compatible Chromium browser.">
     <meta name="theme-color" content="#050b16">
     <link rel="icon" type="image/svg+xml" href="assets/mark.svg">
     <link rel="canonical" href="https://thewizardnexus.github.io/DBOPFS-Studio/install.html">
     <meta property="og:type" content="article">
     <meta property="og:title" content="Install DBOPFS Studio">
-    <meta property="og:description" content="Load the DBOPFS-powered OPFS workspace from source in a compatible Chromium browser.">
+    <meta property="og:description" content="Get DBOPFS Studio from the Chrome Web Store, or follow the guide to install from source.">
     <title>Install | DBOPFS Studio</title>
     <link rel="stylesheet" href="assets/site.css">
     <script type="module" src="assets/site.js?sections=3"></script>
@@ -27,15 +27,20 @@
     <main id="main-content">
         <section class="page-hero">
             <div class="wrap">
-                <p class="eyebrow">Install from source</p>
+                <p class="eyebrow">Install DBOPFS Studio</p>
                 <h1>Open the Studio in Chromium.</h1>
-                <p class="page-lede">DBOPFS Studio is installed from the repository's self-contained <code>extension/</code> folder. No build, CDN, PDF library, or TypeScript toolchain is required to load the extension.</p>
+                <p class="page-lede">Get DBOPFS Studio from the Chrome Web Store. You can also install it from the repository's self-contained <code>extension/</code> folder.</p>
+                <div class="hero-actions"><a class="button" href="https://chromewebstore.google.com/detail/dbopfs-studio/njkkfaopkaekggbadcppebibndhkilge">Get it on Chrome Web Store</a></div>
             </div>
         </section>
 
         <section class="section">
             <div class="wrap page-layout">
                 <article class="prose">
+                    <h2 id="store">Install from the Chrome Web Store</h2>
+                    <p>Open the <a href="https://chromewebstore.google.com/detail/dbopfs-studio/njkkfaopkaekggbadcppebibndhkilge">DBOPFS Studio listing</a> in Chrome, choose <strong>Add to Chrome</strong>, and review the permissions before confirming installation. Then open the website you want to inspect and follow <a href="#connect">Connect an origin</a> below.</p>
+                    <p>The source installation steps below are an alternative for loading the extension manually.</p>
+
                     <h2 id="download">1. Get the source</h2>
                     <p>Clone the repository with Git, or download and extract the ZIP from GitHub. Keep the directory intact: the manifest, workspace, shared modules, and bundled DBOPFS runtime use relative paths inside <code>extension/</code>.</p>
 
@@ -103,7 +108,7 @@
 
                 <aside class="page-toc" aria-label="On this page">
                     <strong>On this page</strong>
-                    <a href="#download">Get the source</a><a href="#load">Load the extension</a><a href="#connect">Connect an origin</a><a href="#pdf">PDFs and printing</a><a href="#update">Update</a><a href="#troubleshoot">Troubleshooting</a>
+                    <a href="#store">Chrome Web Store</a><a href="#download">Get the source</a><a href="#load">Load the extension</a><a href="#connect">Connect an origin</a><a href="#pdf">PDFs and printing</a><a href="#update">Update</a><a href="#troubleshoot">Troubleshooting</a>
                 </aside>
             </div>
         </section>
