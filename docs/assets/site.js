@@ -158,7 +158,22 @@ function installHeroMotion() {
     button.type = 'button';
     button.className = 'hero-motion-toggle';
     button.textContent = 'Resume';
-    home.append(button);
+    const controls = document.createElement('div');
+    controls.className = 'hero-motion-controls';
+    const reset = document.createElement('button');
+    reset.type = 'button';
+    reset.className = 'hero-motion-toggle';
+    reset.textContent = 'Reset';
+    controls.append(button, reset);
+    home.append(controls);
+    const positionKey = 'dbopfs-studio-logo-position';
+    function savePosition() {
+        if (!art.classList.contains('hero-roaming-art')) return;
+        try {
+            localStorage.setItem(positionKey, JSON.stringify({x, y, width: art.offsetWidth,
+                colorTime: art.getAnimations()[0]?.currentTime || 0}));
+        } catch (error) { console.warn('Logo position could not be saved.', error); }
+    }
     let moving = false, frame = 0, last = 0, x = 0, y = 0, vx = -18, vy = 14.4;
     let pointer = null;
     let touchingPointer = false;
@@ -222,6 +237,7 @@ function installHeroMotion() {
         art.style.animationPlayState = 'paused';
         moving = false;
         button.textContent = 'Resume';
+        savePosition();
     }
     function resetHome() {
         stop();
@@ -229,14 +245,32 @@ function installHeroMotion() {
         art.classList.remove('hero-roaming-art');
         art.removeAttribute('style');
         home.append(art);
+        try { localStorage.removeItem(positionKey); }
+        catch (error) { console.warn('Logo position could not be reset.', error); }
     }
-    window.addEventListener('pagehide', resetHome);
+    window.addEventListener('pagehide', stop);
+    reset.addEventListener('click', resetHome);
     button.addEventListener('click', () => moving ? stop() : start());
     document.addEventListener('visibilitychange', () => {
         cancelAnimationFrame(frame); last = 0;
         if (!document.hidden && moving) frame = requestAnimationFrame(tick);
     });
     matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', event => {if (event.matches) resetHome();});
+    try {
+        const saved = JSON.parse(localStorage.getItem(positionKey));
+        if (saved && [saved.x, saved.y, saved.width, saved.colorTime].every(Number.isFinite) && saved.width > 0) {
+            const width = Math.min(saved.width, document.documentElement.clientWidth, innerHeight);
+            x = Math.max(0, Math.min(saved.x, document.documentElement.clientWidth - width));
+            y = Math.max(0, Math.min(saved.y, innerHeight - width));
+            art.style.width = `${width}px`;
+            art.style.left = '0'; art.style.top = '0';
+            art.style.transform = `translate(${x}px, ${y}px)`;
+            art.style.animationPlayState = 'paused';
+            art.classList.add('hero-roaming-art');
+            document.body.append(art);
+            for (const animation of art.getAnimations()) animation.currentTime = saved.colorTime;
+        }
+    } catch (error) { console.warn('Logo position could not be restored.', error); }
     stop();
 }
 installHeroMotion();

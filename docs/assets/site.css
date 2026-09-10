@@ -1756,3 +1756,6 @@ body {position:relative;}
 @media(max-width:40rem) {
  .hero-intro-layout {grid-template-columns:1fr;gap:.75rem;}
 }
+
+.hero-motion-controls {position:absolute;top:calc(100% + .35rem);left:50%;transform:translateX(-50%);display:flex;gap:.5rem;white-space:nowrap;}
+.hero-motion-controls .hero-motion-toggle {min-height:2.75rem;font-size:.9rem;}
